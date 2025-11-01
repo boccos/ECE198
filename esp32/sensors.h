@@ -1,6 +1,10 @@
 #ifndef SENSORS_H
 #define SENSORS_H
 
+#include <Wire.h> // I2C
+#include <DFRobot_MAX30102.h> // pulse oximeter
+
+
 // Structure containing all data required
 struct sensor_data{
     
