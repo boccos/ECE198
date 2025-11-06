@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>ECE 198</title>
-        <script src = "dataFormatter.js" defer></script>
-    </head>
 
-    <body>
-        <header>
-            <div class="headerElements">
+<head>
+    <meta charset="UTF-8">
+    <title>ECE 198</title>
+    <script src="dataFormatter.js" defer></script>
+    <script src="passwordAuthentication.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="headerElements">
+            <div id="password-protected">
                 <nav>
                     <button>Admin</button>
                     <button>Heart Rate</button>
@@ -17,9 +20,17 @@
                     <button>Survey Results</button>
                 </nav>
             </div>
-        </header>
-        <div id="content">
-
         </div>
-    </body>
+    </header>
+    <form id="login-form"><br>
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" /><br><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" /><br><br>
+        <button type="submit">Login</button>
+    </form>
+    <br>
+    <div id="message"></div>
+</body>
+
 </html>
