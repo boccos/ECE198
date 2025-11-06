@@ -9,7 +9,7 @@ const double AlphaAcc = 0.5;
 const int SAMPLES = 10;
 double SmoothedVoltage = RestVoltage;
 
-const int accel_x_pin = 
+
 
 void setup_sensors(){
 
@@ -24,7 +24,7 @@ void setup_sensors(){
     particleSensor.sensorConfiguration(60, SAMPLEAVG_8, MODE_MULTILED, SAMPLERATE_400, PULSEWIDTH_411, ADCRANGE_16384);
     
     // To be done: accelerometer and switch initialization
-    
+
 
     Serial.println("Sensors initialized");
 
@@ -35,10 +35,15 @@ sensor_data retrieve_data(){
     sensor_data live_data;
     
     // SPO2 and HR data, will be populated on heartrateAndOxygenSaturation call:
-    int32_t *SPO2;
-    int8_t *SPO2Valid;
-    int32_t *heartRate;
-    int8_t *heartRateValid;
+    int32_t SPO2;
+    int8_t SPO2Valid;
+    int32_t heartRate;
+    int8_t heartRateValid;
+
+    // accelerometer pins
+    const int accel_x_pin = A0; // to be modified
+    const int accel_y_pin = A1;
+    const int accel_z_pin = A3;
 
     particleSensor.heartrateAndOxygenSaturation(&SPO2, &SPO2Valid, &heartRate, &heartRateValid);
 
@@ -56,11 +61,15 @@ sensor_data retrieve_data(){
 
     live_data.IR = particleSensor.getIR();
 
+    live_data.accel_x = outputAccel(accel_x_pin);
+    live_data.accel_y = outputAccel(accel_y_pin);
+    live_data.accel_z = outputAccel(accel_z_pin);
+
     return live_data;
 
 }
 
-double readAveragedVoltage(int pin, int samples) {
+double readAveragedVoltage(const int pin, int samples) {
   long sum = 0;
   for (int i = 0; i < samples; i++) {
     sum += analogRead(pin);
@@ -73,7 +82,7 @@ double smooth(double newVal, double prevVal, double alpha) {
   return alpha * prevVal + (1 - alpha) * newVal;
 }
 
-double outputAccel(int pin) {
+double outputAccel(const int pin) {
   double Voltage = readAveragedVoltage(pin, SAMPLES);
   SmoothedVoltage = smooth(Voltage, SmoothedVoltage, AlphaAcc);
 
