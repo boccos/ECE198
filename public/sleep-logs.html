@@ -12,10 +12,11 @@
 </head>
 
 <body>
-    <div id="password-protected">
+    <div id="password-protected" hidden>
         <header>
             <div class="headerElements">
                 <nav>
+                    <button onclick="window.location.href='add-patient.html'">Add Patient</button>
                     <button onclick="window.location.href='heartrate.html'">Heart Rate</button>
                     <button onclick="window.location.href='spo2.html'">SPO2</button>
                     <button onclick="window.location.href='sleep-logs.html'">Sleep Logs</button>
@@ -28,7 +29,7 @@
         <div style="width: 800px;"><canvas id="testGraphData"></canvas></div>
         <script type="module" src="js/testGraphData.js"></script>
     </div>
-    <div id="password-protected-warning">
+    <div id="password-protected-warning" hidden>
         <h1>Please log into the application</h1>
         <button onclick="window.location.href='index.html'">Login Page</button>
     </div>

@@ -5,16 +5,18 @@
     <script src="js/dataFormatter.js" defer></script>
     <script src="js/logOut.js" defer></script>
     <script src="js/passwordAuthentication.js" defer></script>
+    <script src="survey.js"></script>
 
     <meta charset="UTF-8">
     <title>ECE 198</title>
 </head>
 
 <body>
-    <div id="password-protected">
+    <div id="password-protected" hidden>
         <header>
             <div class="headerElements">
                 <nav>
+                    <button onclick="window.location.href='add-patient.html'">Add Patient</button>
                     <button onclick="window.location.href='heartrate.html'">Heart Rate</button>
                     <button onclick="window.location.href='spo2.html'">SPO2</button>
                     <button onclick="window.location.href='sleep-logs.html'">Sleep Logs</button>
@@ -23,8 +25,20 @@
                 </nav>
             </div>
         </header>
+        <h1>Simple Survey</h1>
+        <form id="surveyForm">
+
+            <label>How satisfied are you with our service?</label><br><br>
+
+            <label for="feedback">Additional Feedback:</label><br>
+            <textarea id="feedback" name="feedback"></textarea><br><br>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="result"></div>
     </div>
-    <div id="password-protected-warning">
+    <div id="password-protected-warning" hidden>
         <h1>Please log into the application</h1>
         <button onclick="window.location.href='index.html'">Login Page</button>
     </div>

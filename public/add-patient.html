@@ -5,7 +5,6 @@
     <script src="js/dataFormatter.js" defer></script>
     <script src="js/logOut.js" defer></script>
     <script src="js/passwordAuthentication.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <meta charset="UTF-8">
     <title>ECE 198</title>
@@ -25,9 +24,18 @@
                 </nav>
             </div>
         </header>
-        <!-- Test Graph -->
-        <div style="width: 800px;"><canvas id="testGraphData"></canvas></div>
-        <script type="module" src="js/testGraphData.js"></script>
+        <h1>Add Patient</h1>
+        <form id="survey-form">
+            <label for="name">Patient Name:</label><br>
+            <input type="text" id="name" name="name" required><br><br>
+
+            <label for="feedback">Additional Information:</label><br>
+            <textarea id="feedback" name="feedback"></textarea><br><br>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="result"></div>
     </div>
     <div id="password-protected-warning" hidden>
         <h1>Please log into the application</h1>
