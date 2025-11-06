@@ -3,6 +3,14 @@
 // Initialize Pulse Oximeter sensor
 DFRobot_MAX30102 particleSensor;
 
+const double RestVoltage = 1.641;
+const double sensitivity = 0.3;
+const double AlphaAcc = 0.5;
+const int SAMPLES = 10;
+double SmoothedVoltage = RestVoltage;
+
+const int accel_x_pin = 
+
 void setup_sensors(){
 
     Serial.begin(115200); // for debugging
@@ -16,7 +24,7 @@ void setup_sensors(){
     particleSensor.sensorConfiguration(60, SAMPLEAVG_8, MODE_MULTILED, SAMPLERATE_400, PULSEWIDTH_411, ADCRANGE_16384);
     
     // To be done: accelerometer and switch initialization
-
+    
 
     Serial.println("Sensors initialized");
 
@@ -51,3 +59,29 @@ sensor_data retrieve_data(){
     return live_data;
 
 }
+
+double readAveragedVoltage(int pin, int samples) {
+  long sum = 0;
+  for (int i = 0; i < samples; i++) {
+    sum += analogRead(pin);
+    delayMicroseconds(500);
+  }
+  return (sum / (double)samples) * (5.0 / 1023.0);
+}
+
+double smooth(double newVal, double prevVal, double alpha) {
+  return alpha * prevVal + (1 - alpha) * newVal;
+}
+
+double outputAccel(int pin) {
+  double Voltage = readAveragedVoltage(pin, SAMPLES);
+  SmoothedVoltage = smooth(Voltage, SmoothedVoltage, AlphaAcc);
+
+  double g = (Voltage - RestVoltage) / sensitivity;
+  double accel = g * 9.81;
+
+  return accel;
+}
+
+
+

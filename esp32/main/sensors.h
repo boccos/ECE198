@@ -28,5 +28,13 @@ struct sensor_data{
 void setup_sensors();
 sensor_data retrieve_data();
 
+// accelerometer helper functions to gather data from pins
+double readAveragedVoltage(int pin, int samples);
+double smooth(double newVal, double prevVal, double alpha);
+double outputAccel(int pin);
+
+
+
+
 
 #endif
