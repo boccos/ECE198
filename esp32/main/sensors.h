@@ -22,11 +22,14 @@ struct sensor_data{
     // Switches
     double response_time{}; // response time to button press
     bool answered_correctly{}; // if patient answered the question correctly
+    
+    
 };
 
 // Initialize sensors
 void setup_sensors();
-sensor_data retrieve_data();
+void retrieve_data(sensor_data &data);
+
 
 // accelerometer helper functions to gather data from pins
 double readAveragedVoltage(const int pin, int samples);
