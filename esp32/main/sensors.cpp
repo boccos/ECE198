@@ -30,9 +30,7 @@ void setup_sensors(){
 
 }
 
-sensor_data retrieve_data(){
-
-    sensor_data live_data;
+void retrieve_data(sensor_data &data){
     
     // SPO2 and HR data, will be populated on heartrateAndOxygenSaturation call:
     int32_t SPO2;
@@ -48,24 +46,24 @@ sensor_data retrieve_data(){
     particleSensor.heartrateAndOxygenSaturation(&SPO2, &SPO2Valid, &heartRate, &heartRateValid);
 
     if(SPO2Valid){
-        live_data.spO2 = SPO2;
+        data.spO2 = SPO2;
     } else{
-        live_data.spO2 = -1; // not good reading, frontend must take this into account
+        data.spO2 = -1; // not good reading, frontend must take this into account
     }
 
     if(heartRateValid){
-        live_data.heart_rate = heartRate;
+        data.heart_rate = heartRate;
     } else{
-        live_data.heart_rate = -1; // not good reading, frontend must take this into account
+        data.heart_rate = -1; // not good reading, frontend must take this into account
     }
 
-    live_data.IR = particleSensor.getIR();
+    data.IR = particleSensor.getIR();
 
-    live_data.accel_x = outputAccel(accel_x_pin);
-    live_data.accel_y = outputAccel(accel_y_pin);
-    live_data.accel_z = outputAccel(accel_z_pin);
+    data.accel_x = outputAccel(accel_x_pin);
+    data.accel_y = outputAccel(accel_y_pin);
+    data.accel_z = outputAccel(accel_z_pin);
 
-    return live_data;
+    return;
 
 }
 
