@@ -1,4 +1,5 @@
 #include "sensors.h"
+#include <Wire.h>
 
 // Initialize Pulse Oximeter sensor
 DFRobot_MAX30102 particleSensor;
@@ -39,7 +40,7 @@ void retrieve_data(sensor_data &data){
     int8_t heartRateValid;
 
     // accelerometer pins
-    const int accel_x_pin = A0; // to be modified
+    const int accel_x_pin = A0; // to be modified depending on hardware
     const int accel_y_pin = A1;
     const int accel_z_pin = A3;
 
@@ -62,6 +63,10 @@ void retrieve_data(sensor_data &data){
     data.accel_x = outputAccel(accel_x_pin);
     data.accel_y = outputAccel(accel_y_pin);
     data.accel_z = outputAccel(accel_z_pin);
+
+    // temporary variables for the switch system
+    data.response_time = -1;
+    data.answered_correctly = false;
 
     return;
 
