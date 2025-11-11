@@ -23,6 +23,27 @@ async function ensureDirs() {
   await fs.mkdir(STREAMS_DIR, { recursive: true });
   await fs.mkdir(LATEST_DIR, { recursive: true });
 }
+
+async function readJsonArray(filePath) {
+  try {
+    const txt = await fs.readFile(filePath, 'utf-8');
+    const arr = JSON.parse(txt);
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    // If file doesn't exist or invalid JSON, start fresh
+    return [];
+  }
+}
+
+async function appendToHistoryJson(filePath, record, maxLen = 0) {
+  const arr = await readJsonArray(filePath);
+  arr.push(record);
+  if (maxLen > 0 && arr.length > maxLen) {
+    arr.splice(0, arr.length - maxLen);
+  }
+  await fs.writeFile(filePath, JSON.stringify(arr, null, 2), 'utf-8');
+}
+
 function authorized(req, res) {
   const key = req.header('x-api-key');
   if (!key || key !== API_TOKEN) {
@@ -64,7 +85,8 @@ app.post('/api/v1/ingest', async (req, res) => {
     await ensureDirs();
 
     const streamPath = path.join(STREAMS_DIR, `${patientId}.json`);
-    await fs.appendFile(streamPath, JSON.stringify(record) + '\n', 'utf-8');
+    await appendToHistoryJson(streamPath, record, 0);
+
 
     const latestPath = path.join(LATEST_DIR, `${patientId}.json`);
     await fs.writeFile(latestPath, JSON.stringify(record, null, 2), 'utf-8');
@@ -89,7 +111,7 @@ app.get('/api/v1/patients/:id/latest', async (req, res) => {
 app.get('/api/v1/patients/:id/download', (req, res) => {
   const p = path.join(STREAMS_DIR, `${req.params.id}.json`);
   if (!fssync.existsSync(p)) return res.status(404).json({ ok: false, error: 'not_found' });
-  res.setHeader('Content-Type', 'application/x-json');
+  res.setHeader('Content-Type', 'application/json');
   res.setHeader('Content-Disposition', `attachment; filename="${req.params.id}.json"`);
   fssync.createReadStream(p).pipe(res);
 });

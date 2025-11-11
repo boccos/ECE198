@@ -24,21 +24,30 @@ applyBtn?.addEventListener('click', () => setPatientId(getPatientId()));
 async function fetchStreams() {
   const id = getPatientId();
   try {
-    const res = await fetch(`/api/v1/patients/${encodeURIComponent(id)}/latest`);
+    // fetch the JSON array history file
+    const res = await fetch(`/api/v1/patients/${encodeURIComponent(id)}/download`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
+    const rows = await res.json(); // <-- array of records
 
-    spo2El.textContent = json?.data?.spo2 ?? '--';
-    hrEl.textContent = json?.data?.hr ?? '--';
-    const ts = json?.serverTs ?? json?.ts;
+    if (!Array.isArray(rows) || rows.length === 0) {
+      statusEl.textContent = 'No data yet';
+      spo2El.textContent = hrEl.textContent = '--';
+      return;
+    }
+
+    const latest = rows[rows.length - 1]; // last entry = latest
+    spo2El.textContent = latest?.data?.spo2 ?? '--';
+    hrEl.textContent   = latest?.data?.hr ?? '--';
+
+    const ts = latest?.serverTs ?? latest?.ts;
     statusEl.textContent = ts ? `Updated: ${new Date(ts).toLocaleTimeString()}` : 'Updated: —';
   } catch (err) {
-    console.error('Latest fetch failed:', err);
+    console.error('History fetch failed:', err);
     statusEl.textContent = '⚠️ Waiting for data...';
-    spo2El.textContent = '--';
-    hrEl.textContent = '--';
+    spo2El.textContent = hrEl.textContent = '--';
   }
 }
+
 
 function startPolling() {
   fetchStreams();

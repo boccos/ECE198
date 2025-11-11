@@ -1,9 +1,29 @@
-{
-  "patientId": "p001",
-  "sensor": "spo2",
-  "data": {
-    "spo2": 97,
-    "hr": 72
+[
+  {
+    "patientId": "p001",
+    "sensor": "spo2",
+    "data": {
+      "spo2": 97,
+      "hr": 72
+    },
+    "serverTs": 1762904359803
   },
-  "serverTs": 1762899377993
-}
+  {
+    "patientId": "p001",
+    "sensor": "spo2",
+    "data": {
+      "spo2": 95,
+      "hr": 75
+    },
+    "serverTs": 1762904359835
+  },
+  {
+    "patientId": "p001",
+    "sensor": "spo2",
+    "data": {
+      "spo2": 99,
+      "hr": 70
+    },
+    "serverTs": 1762904359862
+  }
+]
