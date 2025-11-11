@@ -1,43 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>ECE 198</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="js/dataFormatter.js" defer></script>
-    <script src="js/login.js" defer></script>
-    <script src="js/logOut.js" defer></script>
-    <script src="js/passwordAuthentication.js" defer></script>
-
-    <meta charset="UTF-8">
-    <title>ECE 198</title>
+  <meta charset="UTF-8" />
+  <title>ECE 198</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/dataFormatter.js" defer></script>
+  <script src="js/login.js" defer></script>
+  <script src="js/logOut.js" defer></script>
+  <script src="js/passwordAuthentication.js" defer></script>
+  <script src="js/fetch.js" type="module" defer></script>
 </head>
-
 <body>
-    <div id="password-protected" hidden>
-        <header>
-            <div class="headerElements">
-                <nav>
-                    <button onclick="window.location.href='patients.html'">Patients</button>
-                    <button onclick="window.location.href='heartrate.html'">Heart Rate</button>
-                    <button onclick="window.location.href='spo2.html'">SPO2</button>
-                    <button onclick="window.location.href='sleep-logs.html'">Sleep Logs</button>
-                    <button onclick="window.location.href='survey.html'">Survey Results</button>
-                    <button id="logoutBtn">Logout</button>
-                </nav>
-            </div>
-        </header>
-    </div>
-    <form id="login-form"><br>
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" /><br><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" /><br><br>
-        <button type="submit">Login</button>
-    </form>
-    <br>
-    <div id="message"></div>
-</body>
+  <div id="password-protected" hidden>
+    <header>
+      <div class="headerElements">
+        <nav>
+          <button onclick="window.location.href='patients.html'">Patients</button>
+          <button onclick="window.location.href='heartrate.html'">Heart Rate</button>
+          <button onclick="window.location.href='spo2.html'">SPO2</button>
+          <button onclick="window.location.href='sleep-logs.html'">Sleep Logs</button>
+          <button onclick="window.location.href='survey.html'">Survey Results</button>
+          <button id="logoutBtn">Logout</button>
+        </nav>
+      </div>
+    </header>
 
+    <main style="padding:1rem;">
+      <h2>Latest Vitals</h2>
+      <label>
+        Patient ID:
+        <input id="patientIdInput" value="p001" />
+      </label>
+      <button id="applyPatientBtn">Use</button>
+
+      <div style="margin-top:1rem;font-size:1.25rem;">
+        SpO₂: <strong id="spo2">--</strong>% &nbsp; | &nbsp;
+        HR: <strong id="hr">--</strong> bpm &nbsp; | &nbsp;
+        <span id="status" style="color:gray;">Waiting...</span>
+      </div>
+    </main>
+  </div>
+
+  <form id="login-form"><br>
+    <label for="username">Username:</label><br>
+    <input type="text" id="username" /><br><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" /><br><br>
+    <button type="submit">Login</button>
+  </form>
+  <br />
+  <div id="message"></div>
+</body>
 </html>
