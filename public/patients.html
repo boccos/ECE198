@@ -5,9 +5,8 @@
     <script src="js/dataFormatter.js" defer></script>
     <script src="js/logOut.js" defer></script>
     <script src="js/passwordAuthentication.js" defer></script>
-    <script src="js/patient.js" defer></script>
-    <script src="js/patientSelection.js" defer></script>
-
+    <script src="js/patientSelection.js" type="module" defer></script>
+    <script src="js/fetch.js" type="module" defer></script>
     <meta charset="UTF-8">
     <title>ECE 198</title>
 </head>
@@ -33,8 +32,23 @@
             <option value="" disabled selected hidden>-- Select a Patient --</option>
             <option value="add">-- Add a Patient --</option>
         </select>
-
         <div id="patientInfo"></div>
+
+        <div style="padding:1rem;">
+            <h2>Latest Vitals</h2>
+            <label>
+                Patient ID:
+                <input id="patientIdInput" value="p001" />
+            </label>
+            <button id="applyPatientBtn">Use</button>
+
+            <div style="margin-top:1rem;font-size:1.25rem;">
+                SpO₂: <strong id="spo2">--</strong>% &nbsp; | &nbsp;
+                HR: <strong id="hr">--</strong> bpm &nbsp; | &nbsp;
+                <span id="status" style="color:gray;">Waiting...</span>
+            </div>
+        </div>
+
     </div>
     <div id="password-protected-warning" hidden>
         <h1>Please log into the application</h1>

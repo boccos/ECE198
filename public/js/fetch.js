@@ -21,7 +21,7 @@ if (patientIdInput) {
 }
 applyBtn?.addEventListener('click', () => setPatientId(getPatientId()));
 
-async function fetchLatest() {
+async function fetchStreams() {
   const id = getPatientId();
   try {
     const res = await fetch(`/api/v1/patients/${encodeURIComponent(id)}/latest`);
@@ -41,8 +41,8 @@ async function fetchLatest() {
 }
 
 function startPolling() {
-  fetchLatest();
-  return setInterval(fetchLatest, INTERVAL_MS);
+  fetchStreams();
+  return setInterval(fetchStreams, INTERVAL_MS);
 }
 
 let pollTimer = null;

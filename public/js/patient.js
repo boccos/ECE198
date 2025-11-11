@@ -1,4 +1,4 @@
-class Patient {
+export default class Patient {
   constructor(id, firstName, lastName) {
     this.id = id;
     this.firstName = firstName;

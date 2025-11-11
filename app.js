@@ -63,7 +63,7 @@ app.post('/api/v1/ingest', async (req, res) => {
   try {
     await ensureDirs();
 
-    const streamPath = path.join(STREAMS_DIR, `${patientId}.ndjson`);
+    const streamPath = path.join(STREAMS_DIR, `${patientId}.json`);
     await fs.appendFile(streamPath, JSON.stringify(record) + '\n', 'utf-8');
 
     const latestPath = path.join(LATEST_DIR, `${patientId}.json`);
@@ -85,12 +85,12 @@ app.get('/api/v1/patients/:id/latest', async (req, res) => {
   res.send(json);
 });
 
-// raw NDJSON download (optional)
+// raw JSON download (optional)
 app.get('/api/v1/patients/:id/download', (req, res) => {
-  const p = path.join(STREAMS_DIR, `${req.params.id}.ndjson`);
+  const p = path.join(STREAMS_DIR, `${req.params.id}.json`);
   if (!fssync.existsSync(p)) return res.status(404).json({ ok: false, error: 'not_found' });
-  res.setHeader('Content-Type', 'application/x-ndjson');
-  res.setHeader('Content-Disposition', `attachment; filename="${req.params.id}.ndjson"`);
+  res.setHeader('Content-Type', 'application/x-json');
+  res.setHeader('Content-Disposition', `attachment; filename="${req.params.id}.json"`);
   fssync.createReadStream(p).pipe(res);
 });
 
