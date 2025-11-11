@@ -4,7 +4,7 @@
 #include "config.h"
 #include <HTTPClient.h>
 
-// config.h
+// config.h -- make sure you guys have config.h
 const char* ssid = WIFI_SSID;
 const char* password = WIFI_PASSWORD;
 const char* url = WEB_URL; 
