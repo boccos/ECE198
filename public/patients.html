@@ -5,6 +5,8 @@
     <script src="js/dataFormatter.js" defer></script>
     <script src="js/logOut.js" defer></script>
     <script src="js/passwordAuthentication.js" defer></script>
+    <script src="js/patient.js" defer></script>
+    <script src="js/patientSelection.js" defer></script>
 
     <meta charset="UTF-8">
     <title>ECE 198</title>
@@ -15,7 +17,7 @@
         <header>
             <div class="headerElements">
                 <nav>
-                    <button onclick="window.location.href='patients.html'">Add patients</button>
+                    <button onclick="window.location.href='patients.html'">Patients</button>
                     <button onclick="window.location.href='heartrate.html'">Heart Rate</button>
                     <button onclick="window.location.href='spo2.html'">SPO2</button>
                     <button onclick="window.location.href='sleep-logs.html'">Sleep Logs</button>
@@ -24,6 +26,15 @@
                 </nav>
             </div>
         </header>
+        <h2>Select a Patient</h2>
+
+        <label for="patientSelect">Choose a patient:</label>
+        <select id="patientSelect">
+            <option value="" disabled selected hidden>-- Select a Patient --</option>
+            <option value="add">-- Add a Patient --</option>
+        </select>
+
+        <div id="patientInfo"></div>
     </div>
     <div id="password-protected-warning" hidden>
         <h1>Please log into the application</h1>
