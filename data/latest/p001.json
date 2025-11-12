@@ -1,9 +1,15 @@
 {
   "patientId": "p001",
-  "sensor": "spo2",
+  "sensor": "esp32",
   "data": {
-    "spo2": 99,
-    "hr": 70
+    "spo2": -1,
+    "hr": -1,
+    "IR": 503,
+    "accel_x": 265.3001504,
+    "accel_y": 61.26877214,
+    "accel_z": 295.8265434,
+    "response_time": 0,
+    "answered_correctly": false
   },
-  "serverTs": 1762904359862
+  "serverTs": 1762908787033
 }
