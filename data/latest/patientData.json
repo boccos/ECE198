@@ -1,0 +1,16 @@
+{
+  "id": "p001",
+  "firstName": "John",
+  "lastName": "Doe",
+  "data": {
+    "spO2": 0,
+    "heartRate": 0,
+    "IR": 0,
+    "accelX": 0,
+    "accelY": 0,
+    "accelZ": 0,
+    "responseTime": 0,
+    "answeredCorrectly": 0
+  },
+  "serverTs": 1762904359803
+}

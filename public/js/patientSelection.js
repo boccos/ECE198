@@ -1,15 +1,11 @@
-import Patient from "./patient.js"
+import fetchStreams from "./patientFetcher.js"
 
-const patients = [
-    new Patient(0, "John", "Doe"),
-    new Patient(1, "Jane", "Smith"),
-];
-
+const patients = await fetchStreams("p001");
 const select = document.getElementById('patientSelect');
 const infoDiv = document.getElementById('patientInfo');
 const addOption = select.querySelector('option[value="add"]');
 
-patients.forEach((patient) => {
+patients.forEach(patient => {
     const option = document.createElement("option");
     option.value = patient.id;
     option.textContent = patient.getFullName();

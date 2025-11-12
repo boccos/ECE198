@@ -4,25 +4,25 @@ const protectedEl = document.getElementById('password-protected');
 const spo2El = document.getElementById('spo2');
 const hrEl = document.getElementById('hr');
 const statusEl = document.getElementById('status');
-const patientIdInput = document.getElementById('patientIdInput');
+const idInput = document.getElementById('idInput');
 const applyBtn = document.getElementById('applyPatientBtn');
 
-const LS_KEY = 'patientId';
-function getPatientId() {
-  return (patientIdInput?.value || localStorage.getItem(LS_KEY) || 'p001').trim();
+const LS_KEY = 'id';
+function getid() {
+  return (idInput?.value || localStorage.getItem(LS_KEY) || 'p001').trim();
 }
-function setPatientId(id) {
-  if (patientIdInput) patientIdInput.value = id;
+function setid(id) {
+  if (idInput) idInput.value = id;
   localStorage.setItem(LS_KEY, id);
 }
-if (patientIdInput) {
+if (idInput) {
   const saved = localStorage.getItem(LS_KEY);
-  if (saved) patientIdInput.value = saved;
+  if (saved) idInput.value = saved;
 }
-applyBtn?.addEventListener('click', () => setPatientId(getPatientId()));
+applyBtn?.addEventListener('click', () => setid(getid()));
 
 async function fetchStreams() {
-  const id = getPatientId();
+  const id = getid();
   try {
     // fetch the JSON array history file
     const res = await fetch(`/api/v1/patients/${encodeURIComponent(id)}/download`);
@@ -47,7 +47,6 @@ async function fetchStreams() {
     spo2El.textContent = hrEl.textContent = '--';
   }
 }
-
 
 function startPolling() {
   fetchStreams();

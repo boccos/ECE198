@@ -1,9 +1,0 @@
-{
-  "patientId": "p001",
-  "sensor": "spo2",
-  "data": {
-    "spo2": 99,
-    "hr": 70
-  },
-  "serverTs": 1762904359862
-}

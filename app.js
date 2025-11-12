@@ -62,9 +62,9 @@ app.get('/health', (req, res) => {
 app.post('/api/v1/ingest', async (req, res) => {
   if (!authorized(req, res)) return;
 
-  const { patientId, sensor, data, ts } = req.body || {};
-  if (typeof patientId !== 'string' || !patientId.trim()) {
-    return res.status(400).json({ ok: false, error: 'patientId required' });
+  const { id, sensor, data, ts } = req.body || {};
+  if (typeof id !== 'string' || !id.trim()) {
+    return res.status(400).json({ ok: false, error: 'id required' });
   }
   if (typeof sensor !== 'string' || !sensor.trim()) {
     return res.status(400).json({ ok: false, error: 'sensor required' });
@@ -74,7 +74,7 @@ app.post('/api/v1/ingest', async (req, res) => {
   }
 
   const record = {
-    patientId,
+    id,
     sensor,
     data,
     ts: Number.isFinite(ts) ? Number(ts) : undefined,
@@ -84,11 +84,11 @@ app.post('/api/v1/ingest', async (req, res) => {
   try {
     await ensureDirs();
 
-    const streamPath = path.join(STREAMS_DIR, `${patientId}.json`);
+    const streamPath = path.join(STREAMS_DIR, `${id}.json`);
     await appendToHistoryJson(streamPath, record, 0);
 
 
-    const latestPath = path.join(LATEST_DIR, `${patientId}.json`);
+    const latestPath = path.join(LATEST_DIR, `${id}.json`);
     await fs.writeFile(latestPath, JSON.stringify(record, null, 2), 'utf-8');
 
     res.status(202).json({ ok: true });
