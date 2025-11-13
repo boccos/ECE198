@@ -6,6 +6,10 @@ const path = require('path');
 const fs = require('fs').promises;
 const fssync = require('fs');
 
+const ENABLE_MOCK_INGEST = process.env.ENABLE_MOCK_INGEST === 'true'; // Code for Testing
+
+
+
 const PORT = process.env.PORT || 3000;
 const API_TOKEN = 'banana' || process.env.INGEST_TOKEN; // change in prod
 
@@ -42,6 +46,20 @@ async function appendToHistoryJson(filePath, record, maxLen = 0) {
   }
   await fs.writeFile(filePath, JSON.stringify(arr, null, 2), 'utf-8');
 }
+
+// Code for Testing
+async function writeRecordToFiles(record) {
+  await ensureDirs();
+
+  // history stream
+  const streamPath = path.join(STREAMS_DIR, `${record.patientId}.json`);
+  await appendToHistoryJson(streamPath, record, 0); // 0 = no cap
+
+  // latest snapshot
+  const latestPath = path.join(LATEST_DIR, `${record.patientId}.json`);
+  await fs.writeFile(latestPath, JSON.stringify(record, null, 2), 'utf-8');
+}
+
 
 // ---- auth helpers (allow header OR body-provided API_KEY) ----
 const TOKEN_STR = process.env.INGEST_TOKENS || process.env.INGEST_TOKEN || 'banana';
@@ -129,8 +147,16 @@ app.post('/api/v1/ingest', async (req, res) => {
   } else {
     return res.status(400).json({ ok: false, error: 'invalid_payload' });
   }
+    // Code for Testing (Uncomment below to restore normal operation)
+    try {
+      await writeRecordToFiles(record);
+      res.status(202).json({ ok: true });
+    } catch (err) {
+      console.error('Ingest write failed:', err);
+      res.status(500).json({ ok: false, error: 'server_error' });
+    }
 
-  try {
+  /*try {
     await ensureDirs();
 
     // --- write to history JSON array ---
@@ -145,7 +171,7 @@ app.post('/api/v1/ingest', async (req, res) => {
   } catch (err) {
     console.error('Ingest write failed:', err);
     res.status(500).json({ ok: false, error: 'server_error' });
-  }
+  } */
 });
 
 
@@ -170,7 +196,53 @@ app.get('/api/v1/patients/:id/download', (req, res) => {
 // 404 last
 app.use((req, res) => res.status(404).send('resource not found'));
 
+// Code for testing
+function makeMockRecord(patientId = 'p001') {
+  return {
+    patientId,
+    sensor: 'esp32',
+    data: {
+      // tweak ranges however you like for testing
+      spo2: 90 + Math.floor(Math.random() * 11),   // 90–100
+      hr: 60 + Math.floor(Math.random() * 41),     // 60–100
+      IR: 400 + Math.floor(Math.random() * 300),   // 400–699
+      accel_x: 200 + Math.random() * 150,          // random-ish floats
+      accel_y: 0 + Math.random() * 150,
+      accel_z: 200 + Math.random() * 150,
+      response_time: Math.random() * 5,            // 0–5 seconds
+      answered_correctly: Math.random() < 0.5
+    },
+    ts: undefined,
+    serverTs: Date.now()
+  };
+}
+
+
+// Code for Testing
+ensureDirs().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Ingest token: ${API_TOKEN === 'banana' ? 'DEFAULT (change in prod)' : 'SET'}`);
+
+    if (ENABLE_MOCK_INGEST) {
+      console.log('Mock ingest enabled: writing test data every 5s for patient p001');
+      setInterval(() => {
+        const mockRecord = makeMockRecord('p001');
+
+        // fire-and-forget async write
+        writeRecordToFiles(mockRecord).catch((err) => {
+          console.error('Mock ingest write failed:', err);
+        });
+      }, 5000); // 5 seconds
+    }
+  });
+}).catch((e) => {
+  console.error('Startup failed:', e);
+  process.exit(1);
+});
+
 // start
+/*
 ensureDirs().then(() => {
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
@@ -180,3 +252,4 @@ ensureDirs().then(() => {
   console.error('Startup failed:', e);
   process.exit(1);
 });
+*/
