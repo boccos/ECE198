@@ -1,6 +1,10 @@
 export default class Patient {
   constructor(id, firstName, lastName, spO2, heartRate, IR, accelX, accelY, accelZ, responseTime, answeredCorrectly) {
-    this.id = parseInt(id.slice(1), 10);
+    if (typeof id === 'string') {
+      this.id = parseInt(id.slice(1), 10);
+    } else {
+      this.id = id;
+    }
     this.firstName = firstName;
     this.lastName = lastName;
     this.spO2 = spO2;

@@ -20,7 +20,6 @@ export default async function fetchStreams() {
       row?.data?.responseTime,
       row?.data?.answeredCorrectly,
     ));
-    console.log(patients);
     return patients;
   } catch (err) {
     console.error('History fetch failed:', err);

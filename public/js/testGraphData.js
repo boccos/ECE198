@@ -1,14 +1,4 @@
-(async function() {
-  const data = [
-    { x: 0, y: 10 },
-    { x: 0.1, y: 20 },
-    { x: 0.2, y: 15 },
-    { x: 0.3, y: 25 },
-    { x: 0.4, y: 22 },
-    { x: 0.5, y: 30 },
-    { x: 0.6, y: 28 },
-  ];
-
+export default async function createChart(data) {
   new Chart(
     document.getElementById('testGraphData'),
     {
@@ -24,5 +14,16 @@
       }
     }
   );
-})();
- 
+}
+
+const exampleData = [
+  { x: 0, y: 10 },
+  { x: 0.1, y: 20 },
+  { x: 0.2, y: 15 },
+  { x: 0.3, y: 25 },
+  { x: 0.4, y: 22 },
+  { x: 0.5, y: 30 },
+  { x: 0.6, y: 28 },
+];
+
+createChart(exampleData);
