@@ -433,5 +433,20 @@
       "answered_correctly": false
     },
     "serverTs": 1762908787033
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 95,
+      "hr": 96,
+      "IR": 528,
+      "accel_x": 200.44008880347263,
+      "accel_y": 9.861239659346555,
+      "accel_z": 201.53004060492043,
+      "response_time": 0.9848964962768647,
+      "answered_correctly": false
+    },
+    "serverTs": 1763070282536
   }
 ]
