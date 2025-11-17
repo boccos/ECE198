@@ -1,9 +1,63 @@
+/* ---------- THEME VARIABLES ---------- */
+
+/* Light mode (default) */
+body {
+  --bg-color: rgba(222, 237, 255, 0.3);
+
+  --header-grad-top: rgba(80, 80, 80, 0.9);
+  --header-grad-bottom: rgba(239, 239, 239, 0.5);
+
+  --logo-color: #2f4f80;
+
+  --btn-primary-bg: #3a82f7;
+  --btn-primary-bg-hover: #2f6fdd;
+
+  --btn-logout-bg: #e05353;
+  --btn-logout-bg-hover: #cc4242;
+
+  --toggle-bg: #1e3a8a; /* moon button color */
+  --toggle-bg-hover: #2f53c0;
+
+  --card-bg: rgba(255, 255, 255, 0.96);
+  --input-bg: #ffffff;
+  --text-color: #1f2937;
+  --input-border: #cbd5e1;
+  --message-color: #b91c1c;
+}
+
+/* Dark mode overrides */
+body.dark-mode {
+  --bg-color: rgba(15, 23, 42, 1);                 /* dark navy background */
+  --header-grad-top: rgba(15, 23, 42, 0.96);
+  --header-grad-bottom: rgba(30, 64, 175, 0.7);    /* deep blue gradient */
+
+  --logo-color: #e5efff;
+
+  --btn-primary-bg: #1d4ed8;
+  --btn-primary-bg-hover: #2563eb;
+
+  --btn-logout-bg: #f97373;
+  --btn-logout-bg-hover: #f05252;
+
+  --toggle-bg: #facc15;   /* sun button yellow */
+  --toggle-bg-hover: #fde047;
+
+  --card-bg: rgba(31, 41, 55, 0.9);   /* lighter gray for contrast */
+  --input-bg: rgba(55, 65, 81, 0.9);  /* medium gray for inputs */
+  --text-color: #e5e7eb;
+  --input-border: #64748b;
+  --message-color: #fecaca;
+}
+
+/* ---------- BASE LAYOUT ---------- */
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: rgba(222, 237, 255, 0.3); /* your purple base */
+  background-color: var(--bg-color);
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--text-color);
 }
 
 /* Hide header completely until JS unhides it */
@@ -12,28 +66,30 @@ html, body {
   visibility: hidden;
 }
 
-/* --- Frosted glass header --- */
+/* ---------- HEADER ---------- */
+
 header {
   position: relative;
   padding: 16px 0;
   border-bottom: 1px solid rgba(226, 232, 240, 0.4);
-  overflow: hidden; /* prevent bleed */
+  overflow: hidden;
 }
+
 header::before {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(80, 80, 80, 0.9),
-    rgba(239, 239, 239, 0.5)
+    var(--header-grad-top),
+    var(--header-grad-bottom)
   );
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   z-index: -1;
 }
 
-/* --- Header layout --- */
+/* Header layout */
 .header nav {
   display: flex;
   align-items: center;
@@ -47,14 +103,43 @@ header::before {
 #header-logo {
   font-size: 32px;
   font-weight: 700;
-  color: #2f4f80; /* calm medical blue */
+  color: var(--logo-color);
   letter-spacing: 1px;
   margin-right: 16px;
 }
 
-/* --- Buttons --- */
+/* ---------- TOGGLE BUTTON ---------- */
+
+#toggleViewMode {
+  background-color: var(--toggle-bg);
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#toggleViewMode:hover {
+  background-color: var(--toggle-bg-hover);
+  transform: translateY(-1px);
+}
+
+#toggleViewMode:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- GENERAL BUTTONS ---------- */
+
 button {
-  background-color: #3a82f7; /* medical blue */
+  background-color: var(--btn-primary-bg);
   border: none;
   padding: 10px 22px;
   border-radius: 8px;
@@ -65,25 +150,31 @@ button {
   transition: background 0.2s ease, transform 0.15s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
+
 button:hover {
-  background-color: #2f6fdd;
+  background-color: var(--btn-primary-bg-hover);
   transform: translateY(-1px);
 }
+
 button:active {
   transform: translateY(1px);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
+
+/* Logout button */
 #logoutBtn {
   margin-left: auto;
-  background-color: #e05353; /* red logout */
-}
-#logoutBtn:hover {
-  background-color: #cc4242;
+  background-color: var(--btn-logout-bg);
 }
 
-/* --- Login form --- */
+#logoutBtn:hover {
+  background-color: var(--btn-logout-bg-hover);
+}
+
+/* ---------- LOGIN FORM ---------- */
+
 #login-form {
-  background: rgba(255, 255, 255, 0.96);
+  background: var(--card-bg);
   padding: 24px 20px;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15);
@@ -96,7 +187,7 @@ button:active {
   display: block;
   font-size: 14px;
   margin-bottom: 4px;
-  color: #1f2937;
+  color: var(--text-color);
 }
 
 #login-form input {
@@ -104,20 +195,23 @@ button:active {
   padding: 8px 10px;
   margin-bottom: 14px;
   border-radius: 8px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--input-border);
   font-size: 14px;
   outline: none;
   box-sizing: border-box;
+  background-color: var(--input-bg);
+  color: var(--text-color);
 }
+
 #login-form input:focus {
-  border-color: #3a82f7;
+  border-color: var(--btn-primary-bg);
   box-shadow: 0 0 0 1px rgba(58, 130, 247, 0.4);
 }
 
-/* Login button */
+/* Login button inside form */
 #login-form button[type="submit"] {
   width: 100%;
-  background-color: #3a82f7;
+  background-color: var(--btn-primary-bg);
   border: none;
   padding: 10px 0;
   border-radius: 8px;
@@ -127,18 +221,20 @@ button:active {
   cursor: pointer;
   transition: background 0.2s ease, transform 0.15s ease;
 }
+
 #login-form button[type="submit"]:hover {
-  background-color: #2f6fdd;
+  background-color: var(--btn-primary-bg-hover);
   transform: translateY(-1px);
 }
+
 #login-form button[type="submit"]:active {
   transform: translateY(1px);
 }
 
-/* Message text */
+/* ---------- MESSAGE TEXT ---------- */
 #message {
   text-align: center;
   font-size: 14px;
-  color: #b91c1c;
+  color: var(--message-color);
   margin-top: 10px;
 }
