@@ -21,6 +21,8 @@ struct sensor_data{
     
     // Switches
     double response_time{}; // response time to button press
+    bool L_is_light_on{}; // if left light is on
+    bool R_is_light_on{}; // if right light is on
     bool answered_correctly{}; // if patient answered the question correctly
     
     
@@ -35,6 +37,13 @@ void retrieve_data(sensor_data &data);
 double readAveragedVoltage(const int pin, int samples);
 double smooth(double newVal, double prevVal, double alpha);
 double outputAccel(const int pin);
+
+
+// light functions
+void L_lightOn(sensor_data &data);
+void L_lightOff(sensor_data &data);
+void R_lightOn(sensor_data &data);
+void R_lightOff(sensor_data &data);
 
 
 
