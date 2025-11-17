@@ -3,11 +3,13 @@
 #include <WiFi.h>
 #include "config.h"
 #include <HTTPClient.h>
+#include <WebServer.h>
 
 // config.h -- make sure you guys have config.h
 const char* ssid = WIFI_SSID;
 const char* password = WIFI_PASSWORD;
 const char* url = WEB_URL; 
+const char* GET_URL = GET_URL;
 
 unsigned long previous_time = 0;
 const unsigned long time_delay = 1000;  // 1 second delay between post requests
@@ -25,6 +27,7 @@ void setup() {
     delay(500);
   }
 
+  WebServer server(80);
   Serial.println("Connected.");
 
 
@@ -46,6 +49,18 @@ void loop() {
 
       // Create sensor_data object
       sensor_data data;
+
+      // GET Request
+      server.on("/L/on", HTTP_GET, L_light_on);
+      server.on("/R/on", HTTP_GET, R_light_on);
+      // Data for light
+      if(data.L_is_light_on || data.R_is_light_on){
+        
+      }
+      
+
+
+
 
       // Retrieve health data by reference to data
       retrieve_data(data);
