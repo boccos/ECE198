@@ -10,6 +10,11 @@ const double AlphaAcc = 0.5;
 const int SAMPLES = 10;
 double SmoothedVoltage = RestVoltage;
 
+// To be set
+const int L_light_pin = D2;
+const int R_light_pin = D3;
+const int L_button = D4;
+const int R_button = D5;
 
 
 void setup_sensors(){
@@ -24,8 +29,17 @@ void setup_sensors(){
 
     particleSensor.sensorConfiguration(60, SAMPLEAVG_8, MODE_MULTILED, SAMPLERATE_400, PULSEWIDTH_411, ADCRANGE_16384);
     
-    // To be done: accelerometer and switch initialization
+    // Light initialization
+    pinMode(L_light_pin, OUTPUT);
+    pinMode(R_light_pin, OUTPUT);
+    
+    // Switch initialization
+    pinMode(L_button, INPUT);
+    pinMode(R_button, INPUT);
 
+    // Set outputs to LOW by default
+    digitalWrite(L_light_pin, LOW);
+    digitalWrite(R_light_pin, LOW);
 
     Serial.println("Sensors initialized");
 
@@ -67,6 +81,8 @@ void retrieve_data(sensor_data &data){
     // temporary variables for the switch system
     data.response_time = -1;
     data.answered_correctly = false;
+    data.L_is_light_on = false; // left light
+    data.R_is_light_on = false;
 
     return;
 
@@ -94,6 +110,25 @@ double outputAccel(const int pin) {
 
   return accel;
 }
+
+
+void L_lightOn(sensor_data &data){
+  digitalWrite(L_light_pin, HIGH);
+  data.L_is_light_on = true;
+}
+void L_lightOff(){
+  digitalWrite(L_light_pin, LOW);
+  data.L_is_light_on = false;
+}
+void R_lightOn(){
+  digitalWrite(R_light_pin, HIGH);
+  data.R_is_light_on = true;
+}
+void R_lightOff(){
+  digitalWrite(R_light_pin, LOW);
+  data.L_is_light_on = false;
+}
+
 
 
 
