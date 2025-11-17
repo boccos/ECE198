@@ -31,7 +31,7 @@ async function fetchLatest() {
   isFetching = true;
 
   try {
-    const res = await fetch(`/api/v1/patients/p001/stream`);
+    const res = await fetch(`/api/v1/patients/p001/latest`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const rows = await res.json();
     if (firstServerTs === null) {
