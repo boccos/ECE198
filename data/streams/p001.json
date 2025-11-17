@@ -7453,5 +7453,320 @@
       "answered_correctly": true
     },
     "serverTs": 1763342085227
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 90,
+      "hr": 72,
+      "IR": 586,
+      "accel_x": 282.9429214070573,
+      "accel_y": 46.079803001354556,
+      "accel_z": 231.35618502231495,
+      "response_time": 3.313937677407047,
+      "answered_correctly": false
+    },
+    "serverTs": 1763342182663
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 91,
+      "hr": 64,
+      "IR": 591,
+      "accel_x": 289.2607716733603,
+      "accel_y": 90.82111047015246,
+      "accel_z": 244.79303912792443,
+      "response_time": 3.125711361599336,
+      "answered_correctly": true
+    },
+    "serverTs": 1763342188040
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 95,
+      "hr": 69,
+      "IR": 593,
+      "accel_x": 334.1100303372588,
+      "accel_y": 48.54701889385934,
+      "accel_z": 271.34169600764824,
+      "response_time": 4.316164236296762,
+      "answered_correctly": true
+    },
+    "serverTs": 1763342193407
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 90,
+      "hr": 88,
+      "IR": 440,
+      "accel_x": 249.5139499079063,
+      "accel_y": 146.45019583289033,
+      "accel_z": 247.6392326109887,
+      "response_time": 3.663798615257453,
+      "answered_correctly": false
+    },
+    "serverTs": 1763342198769
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 92,
+      "hr": 61,
+      "IR": 586,
+      "accel_x": 269.63851240843,
+      "accel_y": 34.37248750656604,
+      "accel_z": 212.9145745055967,
+      "response_time": 3.725026590067073,
+      "answered_correctly": true
+    },
+    "serverTs": 1763342204124
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 93,
+      "hr": 89,
+      "IR": 577,
+      "accel_x": 310.7583089040588,
+      "accel_y": 56.48035328475023,
+      "accel_z": 211.37091764570198,
+      "response_time": 2.257084847920315,
+      "answered_correctly": true
+    },
+    "serverTs": 1763342209434
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 96,
+      "hr": 88,
+      "IR": 435,
+      "accel_x": 248.94314392965902,
+      "accel_y": 3.5352640495842413,
+      "accel_z": 264.0407303885629,
+      "response_time": 2.1321141869111426,
+      "answered_correctly": true
+    },
+    "serverTs": 1763342214791
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 97,
+      "hr": 80,
+      "IR": 502,
+      "accel_x": 294.88409973831233,
+      "accel_y": 75.81016065163783,
+      "accel_z": 299.44573407140507,
+      "response_time": 4.400958292075009,
+      "answered_correctly": false
+    },
+    "serverTs": 1763342220221
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 97,
+      "hr": 97,
+      "IR": 648,
+      "accel_x": 284.41286635652267,
+      "accel_y": 104.18799449155684,
+      "accel_z": 344.98031446805845,
+      "response_time": 3.523600070821713,
+      "answered_correctly": false
+    },
+    "serverTs": 1763342225498
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 96,
+      "hr": 74,
+      "IR": 441,
+      "accel_x": 277.18934379529605,
+      "accel_y": 115.6781386890841,
+      "accel_z": 298.3682610928372,
+      "response_time": 4.3996962993577915,
+      "answered_correctly": true
+    },
+    "serverTs": 1763342230864
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 93,
+      "hr": 86,
+      "IR": 629,
+      "accel_x": 321.1676777561986,
+      "accel_y": 77.87269153736823,
+      "accel_z": 267.72111461560223,
+      "response_time": 2.365510199248171,
+      "answered_correctly": false
+    },
+    "serverTs": 1763342236157
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 100,
+      "hr": 67,
+      "IR": 683,
+      "accel_x": 278.24390560505907,
+      "accel_y": 44.045184517291425,
+      "accel_z": 339.7064172288507,
+      "response_time": 1.216208699627741,
+      "answered_correctly": false
+    },
+    "serverTs": 1763342241541
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 93,
+      "hr": 81,
+      "IR": 681,
+      "accel_x": 331.9980251624411,
+      "accel_y": 58.60298499273959,
+      "accel_z": 210.5501042165851,
+      "response_time": 2.0074177178592434,
+      "answered_correctly": true
+    },
+    "serverTs": 1763342246818
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 99,
+      "hr": 75,
+      "IR": 649,
+      "accel_x": 256.70822555970176,
+      "accel_y": 66.01493544577589,
+      "accel_z": 318.1076738475117,
+      "response_time": 3.60898077953282,
+      "answered_correctly": false
+    },
+    "serverTs": 1763342252209
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 97,
+      "hr": 78,
+      "IR": 690,
+      "accel_x": 235.90742495819498,
+      "accel_y": 62.046104153879455,
+      "accel_z": 207.12958596597142,
+      "response_time": 0.14900707275557368,
+      "answered_correctly": true
+    },
+    "serverTs": 1763342257586
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 99,
+      "hr": 88,
+      "IR": 482,
+      "accel_x": 248.8784604722673,
+      "accel_y": 40.480780284645505,
+      "accel_z": 288.6328191419975,
+      "response_time": 2.2229651443436147,
+      "answered_correctly": false
+    },
+    "serverTs": 1763342262973
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 92,
+      "hr": 75,
+      "IR": 671,
+      "accel_x": 221.1202792945655,
+      "accel_y": 101.89566190362508,
+      "accel_z": 290.5007554869372,
+      "response_time": 1.0854190588026946,
+      "answered_correctly": true
+    },
+    "serverTs": 1763342268367
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 100,
+      "hr": 63,
+      "IR": 532,
+      "accel_x": 216.039547149585,
+      "accel_y": 108.88824155474182,
+      "accel_z": 322.4308689919953,
+      "response_time": 0.4476258153957635,
+      "answered_correctly": true
+    },
+    "serverTs": 1763342273655
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 93,
+      "hr": 69,
+      "IR": 462,
+      "accel_x": 247.48771264692775,
+      "accel_y": 113.83088797223945,
+      "accel_z": 231.47362444839297,
+      "response_time": 0.2754902697863315,
+      "answered_correctly": true
+    },
+    "serverTs": 1763342279037
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 97,
+      "hr": 93,
+      "IR": 676,
+      "accel_x": 312.92441439600344,
+      "accel_y": 71.47093395829735,
+      "accel_z": 286.64157688254375,
+      "response_time": 2.234138604902147,
+      "answered_correctly": false
+    },
+    "serverTs": 1763342284429
+  },
+  {
+    "patientId": "p001",
+    "sensor": "esp32",
+    "data": {
+      "spo2": 97,
+      "hr": 92,
+      "IR": 489,
+      "accel_x": 208.46611660485178,
+      "accel_y": 65.76125973931681,
+      "accel_z": 222.83610128954933,
+      "response_time": 3.495662147695755,
+      "answered_correctly": false
+    },
+    "serverTs": 1763342289796
   }
 ]
