@@ -1,23 +1,13 @@
-import Patient from "./patient.js"
+import { getCurrentPatient } from './currentPatient.js';
 
 const INTERVAL_MS = 5000;
 
+const currentPatient = getCurrentPatient();
 
-const currentPatient = new Patient(
-  -1,
-  "",
-  "",
-  [],
-  [],
-  [],
-  [],
-  [],
-  [],
-  [],
-  []
-);
-
-export default async function getCurrentPatient() {
+export default async function getAsyncCurrentPatient() {
+  if (currentPatient == null) {
+    return null;
+  }
   await fetchLatest();
   return currentPatient;
 }
@@ -53,9 +43,6 @@ async function fetchLatest() {
     const res = await fetch(`/api/v1/patients/p001/latest`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const rows = await res.json();
-    if (firstServerTs === null) {
-      firstServerTs = rows?.serverTs;
-    }
     currentPatient.updateData(rows?.serverTs - firstServerTs, rows?.data);
   } catch (err) {
     console.error('Live fetch failed:', err);
@@ -64,6 +51,8 @@ async function fetchLatest() {
   }
 }
 
-fetchStreams();
-fetchLatest();
-setInterval(fetchLatest, INTERVAL_MS);
+if (currentPatient != null) {
+  fetchStreams();
+  fetchLatest();
+  setInterval(fetchLatest, INTERVAL_MS);
+}

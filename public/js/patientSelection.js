@@ -1,31 +1,27 @@
 import Patient from "./patient.js"
 import fetchStreams from "./patientFetcher.js"
+import { setCurrentPatient } from './currentPatient.js';
 
 const patients = await fetchStreams();
 const select = document.getElementById('patient-select');
 const infoDiv = document.getElementById('patient-info');
 const addOption = select.querySelector('option[value="add"]');
-const addPatient = document.getElementById('add-patient');
+// const addPatient = document.getElementById('add-patient');
 
 patients.forEach(patient => {
     const option = document.createElement("option");
     option.value = patient.id;
     option.textContent = patient.getFullName();
-    select.insertBefore(option, addOption);
+    select.appendChild(option);
 });
 
-function showPatientInfo() {
-    const selectedId = parseInt(select.value);
-    const patient = patients.find(p => p.id === selectedId);
+select.addEventListener('change', (event) => {
+        const selectedId = parseInt(select.value);
+        const patient = patients.find(p => p.id === selectedId);
     infoDiv.innerHTML = `
         <h3>${patient.getFullName()}'s information is currently being displayed!</h3>
-      `;
-}
-
-function openPatientForm() {
-    infoDiv.innerHTML = ``;
-    addPatient.hidden = false;
-}
+        `;
+});
 
 document.getElementById("patient-form").addEventListener("submit", function (event) {
     event.preventDefault();
@@ -38,12 +34,5 @@ document.getElementById("patient-form").addEventListener("submit", function (eve
     option.textContent = patient.getFullName();
     select.insertBefore(option, addOption);
     select.value = patient.id;
-});
-
-select.addEventListener('change', (event) => {
-    if (event.target.value === 'add') {
-        openPatientForm();
-    } else {
-        showPatientInfo();
-    }
+    setCurrentPatient(patient);
 });

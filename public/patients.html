@@ -30,22 +30,22 @@
         <label for="patient-select">Choose a patient:</label>
         <select id="patient-select">
             <option value="" disabled selected hidden>-- Select a Patient --</option>
-            <option value="add">-- Add a Patient --</option>
         </select>
         <div id="patient-info"></div>
     </div>
-    <div id="add-patient" hidden>
-        <form id="patient-form">
-            <h3>Please input information below</h3>
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" required><br><br>
 
-            <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName" required><br><br>
+    <h2>Add a Patient</h2>
 
-            <button type="submit">Begin Data Collection!</button>
-        </form>
-    </div>
+    <form id="patient-form">
+        <h3>Please input information below</h3>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required><br><br>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required><br><br>
+
+        <button type="submit">Begin Data Collection!</button>
+    </form>
     <div id="password-protected-warning" hidden>
         <h1>Please log into the application</h1>
         <button onclick="window.location.href='index.html'">Login Page</button>

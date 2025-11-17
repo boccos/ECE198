@@ -12,6 +12,8 @@ export default async function fetchStreams() {
       row?.id,
       row?.firstName,
       row?.lastName,
+      row?.startTs,
+      row?.endTs,
       row?.data?.spo2,
       row?.data?.hr,
       row?.data?.IR,

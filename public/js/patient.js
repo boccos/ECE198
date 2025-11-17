@@ -1,10 +1,12 @@
 export default class Patient {
-  constructor(id, firstName, lastName, spO2, heartRate, IR, accelX, accelY, accelZ, responseTime, answeredCorrectly) {
+  constructor(id, firstName, lastName, startTs=-1, endTs=-1, spO2=[], heartRate=[], IR=[], accelX=[], accelY=[], accelZ=[], responseTime=[], answeredCorrectly=[]) {
     if (typeof id === 'string') {
       this.id = parseInt(id.slice(1), 10);
     } else {
       this.id = id;
     }
+    this.startTs = startTs;
+    this.endTs = endTs;
     this.firstName = firstName;
     this.lastName = lastName;
     this.spO2 = spO2;
@@ -15,6 +17,18 @@ export default class Patient {
     this.accelZ = accelZ;
     this.responseTime = responseTime;
     this.answeredCorrectly = answeredCorrectly;
+  }
+
+  setId(id) {
+    this.id = id;
+  }
+
+  setStartTs(startTs) {
+    this.startTs = startTs;
+  }
+
+  setEndTs(endTs) {
+    this.endTs = endTs;
   }
 
   getFullName() {
