@@ -1,56 +1,144 @@
-/* Medical-grade header background */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: rgba(222, 237, 255, 0.3); /* your purple base */
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* Hide header completely until JS unhides it */
+#password-protected[hidden] {
+  display: none !important;
+  visibility: hidden;
+}
+
+/* --- Frosted glass header --- */
 header {
-    background-color: #f7f9fc;     /* soft clinical white-blue */
-    padding: 16px 0;
-    border-bottom: 2px solid #e2e8f0; /* gentle divider line */
+  position: relative;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.4);
+  overflow: hidden; /* prevent bleed */
+}
+header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(80, 80, 80, 0.9),
+    rgba(239, 239, 239, 0.5)
+  );
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: -1;
 }
 
-/* Center content and give breathing space */
-.header {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 28px;
-}
-
+/* --- Header layout --- */
 .header nav {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 28px;
 }
 
-/* Medical Buttons */
-.header nav button {
-    background-color: #3a82f7;      /* medical blue */
-    border: none;
-    padding: 10px 22px;
-    border-radius: 8px;
-    font-size: 15px;
-    color: white;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.15s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* light clean shadow */
+/* Logo text */
+#header-logo {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2f4f80; /* calm medical blue */
+  letter-spacing: 1px;
+  margin-right: 16px;
 }
 
-/* Hover: brighter, calm */
-.header nav button:hover {
-    background-color: #2f6fdd;
-    transform: translateY(-1px);
+/* --- Buttons --- */
+button {
+  background-color: #3a82f7; /* medical blue */
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
-
-/* Pressed state */
-.header nav button:active {
-    transform: translateY(1px);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+button:hover {
+  background-color: #2f6fdd;
+  transform: translateY(-1px);
 }
-
-/* Right-aligned logout */
+button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
 #logoutBtn {
-    margin-left: auto;
-    background-color: #e05353; 
+  margin-left: auto;
+  background-color: #e05353; /* red logout */
+}
+#logoutBtn:hover {
+  background-color: #cc4242;
 }
 
-/* Logout hover */
-#logoutBtn:hover {
-    background-color: #cc4242;
+/* --- Login form --- */
+#login-form {
+  background: rgba(255, 255, 255, 0.96);
+  padding: 24px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15);
+  min-width: 260px;
+  max-width: 320px;
+  margin: 60px auto;
+}
+
+#login-form label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #1f2937;
+}
+
+#login-form input {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+#login-form input:focus {
+  border-color: #3a82f7;
+  box-shadow: 0 0 0 1px rgba(58, 130, 247, 0.4);
+}
+
+/* Login button */
+#login-form button[type="submit"] {
+  width: 100%;
+  background-color: #3a82f7;
+  border: none;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-size: 15px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+#login-form button[type="submit"]:hover {
+  background-color: #2f6fdd;
+  transform: translateY(-1px);
+}
+#login-form button[type="submit"]:active {
+  transform: translateY(1px);
+}
+
+/* Message text */
+#message {
+  text-align: center;
+  font-size: 14px;
+  color: #b91c1c;
+  margin-top: 10px;
 }

@@ -6,9 +6,11 @@ const path = require('path');
 const fs = require('fs').promises;
 const fssync = require('fs');
 
+// ---------------------------------------------------------
+// Config / Constants
+// ---------------------------------------------------------
+
 const ENABLE_MOCK_INGEST = process.env.ENABLE_MOCK_INGEST === 'true'; // Code for Testing
-
-
 
 const PORT = process.env.PORT || 3000;
 const API_TOKEN = 'banana' || process.env.INGEST_TOKEN; // change in prod
@@ -21,6 +23,14 @@ app.use(express.static(path.resolve(__dirname, 'public')));
 const DATA_DIR = path.resolve(__dirname, 'data');
 const STREAMS_DIR = path.join(DATA_DIR, 'streams');
 const LATEST_DIR = path.join(DATA_DIR, 'latest');
+
+// ---- auth helpers (allow header OR body-provided API_KEY) ----
+const TOKEN_STR = process.env.INGEST_TOKENS || process.env.INGEST_TOKEN || 'banana';
+const TOKENS = TOKEN_STR.split(',').map(s => s.trim()).filter(Boolean);
+
+// ---------------------------------------------------------
+// Directory / File Helpers
+// ---------------------------------------------------------
 
 // ensure folders exist
 async function ensureDirs() {
@@ -60,10 +70,9 @@ async function writeRecordToFiles(record) {
   await fs.writeFile(latestPath, JSON.stringify(record, null, 2), 'utf-8');
 }
 
-
-// ---- auth helpers (allow header OR body-provided API_KEY) ----
-const TOKEN_STR = process.env.INGEST_TOKENS || process.env.INGEST_TOKEN || 'banana';
-const TOKENS = TOKEN_STR.split(',').map(s => s.trim()).filter(Boolean);
+// ---------------------------------------------------------
+// Auth
+// ---------------------------------------------------------
 
 function extractApiKey(req) {
   // prefer header; fall back to body.API_KEY for ESP payloads
@@ -78,6 +87,10 @@ function authorized(req, res) {
   }
   return true;
 }
+
+// ---------------------------------------------------------
+// Routes
+// ---------------------------------------------------------
 
 // healthcheck
 app.get('/health', (req, res) => {
@@ -102,10 +115,20 @@ app.post('/api/v1/ingest', async (req, res) => {
 
   let record;
 
-  const isServerNative = typeof b === 'object' && b !== null && b.data && (b.patientId || patientId);
-  const isEspNative = typeof b === 'object' && b !== null && (
-    b.spO2 !== undefined || b.heart_rate !== undefined || b.IR !== undefined
-  );
+  const isServerNative =
+    typeof b === 'object' &&
+    b !== null &&
+    b.data &&
+    (b.patientId || patientId);
+
+  const isEspNative =
+    typeof b === 'object' &&
+    b !== null &&
+    (
+      b.spO2 !== undefined ||
+      b.heart_rate !== undefined ||
+      b.IR !== undefined
+    );
 
   if (isServerNative) {
     // Use as-is, but make sure patientId / serverTs are set
@@ -118,6 +141,7 @@ app.post('/api/v1/ingest', async (req, res) => {
     if (typeof b.data !== 'object' || b.data === null || Array.isArray(b.data)) {
       return res.status(400).json({ ok: false, error: 'data object required' });
     }
+
     record = {
       patientId,
       sensor: b.sensor,
@@ -147,14 +171,15 @@ app.post('/api/v1/ingest', async (req, res) => {
   } else {
     return res.status(400).json({ ok: false, error: 'invalid_payload' });
   }
-    // Code for Testing (Uncomment below to restore normal operation)
-    try {
-      await writeRecordToFiles(record);
-      res.status(202).json({ ok: true });
-    } catch (err) {
-      console.error('Ingest write failed:', err);
-      res.status(500).json({ ok: false, error: 'server_error' });
-    }
+
+  // Code for Testing (Uncomment below to restore normal operation)
+  try {
+    await writeRecordToFiles(record);
+    res.status(202).json({ ok: true });
+  } catch (err) {
+    console.error('Ingest write failed:', err);
+    res.status(500).json({ ok: false, error: 'server_error' });
+  }
 
   /*try {
     await ensureDirs();
@@ -174,11 +199,12 @@ app.post('/api/v1/ingest', async (req, res) => {
   } */
 });
 
-
 // latest snapshot (handy for quick checks/front-end)
 app.get('/api/v1/patients/:id/latest', async (req, res) => {
   const p = path.join(LATEST_DIR, `${req.params.id}.json`);
-  if (!fssync.existsSync(p)) return res.status(404).json({ ok: false, error: 'not_found' });
+  if (!fssync.existsSync(p)) {
+    return res.status(404).json({ ok: false, error: 'not_found' });
+  }
   const json = await fs.readFile(p, 'utf-8');
   res.setHeader('Content-Type', 'application/json');
   res.send(json);
@@ -187,7 +213,9 @@ app.get('/api/v1/patients/:id/latest', async (req, res) => {
 // raw JSON download (optional)
 app.get('/api/v1/patients/:id/download', (req, res) => {
   const p = path.join(STREAMS_DIR, `${req.params.id}.json`);
-  if (!fssync.existsSync(p)) return res.status(404).json({ ok: false, error: 'not_found' });
+  if (!fssync.existsSync(p)) {
+    return res.status(404).json({ ok: false, error: 'not_found' });
+  }
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Content-Disposition', `attachment; filename="${req.params.id}.json"`);
   fssync.createReadStream(p).pipe(res);
@@ -195,6 +223,10 @@ app.get('/api/v1/patients/:id/download', (req, res) => {
 
 // 404 last
 app.use((req, res) => res.status(404).send('resource not found'));
+
+// ---------------------------------------------------------
+// Mock / Testing Helpers
+// ---------------------------------------------------------
 
 // Code for testing
 function makeMockRecord(patientId = 'p001') {
@@ -217,6 +249,9 @@ function makeMockRecord(patientId = 'p001') {
   };
 }
 
+// ---------------------------------------------------------
+// Startup
+// ---------------------------------------------------------
 
 // Code for Testing
 ensureDirs().then(() => {
