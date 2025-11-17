@@ -20,4 +20,18 @@ export default class Patient {
   getFullName() {
     return `${this.firstName} ${this.lastName}`;
   }
+
+  updateData(deltaTime, data) {
+    if (this.spO2.length > 1 && this.spO2[this.spO2.length - 1][0] === deltaTime) {
+      return;
+    }
+    this.spO2.push([deltaTime, data?.spo2]);
+    this.heartRate.push([deltaTime, data?.hr]);
+    this.IR.push([deltaTime, data?.IR]);
+    this.accelX.push([deltaTime, data?.accel_x]);
+    this.accelY.push([deltaTime, data?.accel_y]);
+    this.accelZ.push([deltaTime, data?.accel_z]);
+    this.responseTime.push([deltaTime, data?.response_time]);
+    this.answeredCorrectly.push([deltaTime, data?.answered_correctly]);
+  }
 }

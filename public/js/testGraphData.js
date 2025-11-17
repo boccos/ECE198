@@ -1,29 +1,48 @@
-export default async function createChart(data) {
-  new Chart(
-    document.getElementById('testGraphData'),
-    {
-      type: 'line',
-      data: {
-        labels: data.map(row => row.x),
-        datasets: [
-          {
-            label: 'Label Here',
-            data: data.map(row => row.y)
-          }
-        ]
+import getCurrentPatient from "./liveFetcher.js"
+
+let chart = new Chart(document.getElementById("testGraphData"), {
+  type: "line",
+  data: {
+    datasets: [{
+      label: "Heart Rate",
+      data: [], // will hold {x, y} objects
+      borderColor: "red",
+      fill: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    animation: false,
+    scales: {
+      x: {
+        type: "linear", // or "time" if x is a timestamp
+        title: {
+          display: true,
+          text: "Time",
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: "Heart Rate",
+        },
       }
     }
-  );
+  }
+});
+
+async function updateChart() {
+  try {
+    const patient = await getCurrentPatient();
+    chart.data.datasets[0].data = patient.heartRate; // assuming patient.heartRate exists
+    chart.update();
+  } catch (err) {
+    console.error("Chart update failed:", err);
+  }
 }
 
-const exampleData = [
-  { x: 0, y: 10 },
-  { x: 0.1, y: 20 },
-  { x: 0.2, y: 15 },
-  { x: 0.3, y: 25 },
-  { x: 0.4, y: 22 },
-  { x: 0.5, y: 30 },
-  { x: 0.6, y: 28 },
-];
+// Initial update
+updateChart();
 
-createChart(exampleData);
+// Update every 5 seconds
+setInterval(updateChart, 5000);

@@ -1,7 +1,7 @@
 import Patient from "./patient.js"
 import fetchStreams from "./patientFetcher.js"
 
-const patients = await fetchStreams("p001");
+const patients = await fetchStreams();
 const select = document.getElementById('patient-select');
 const infoDiv = document.getElementById('patient-info');
 const addOption = select.querySelector('option[value="add"]');

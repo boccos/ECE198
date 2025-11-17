@@ -8,17 +8,18 @@ export default async function fetchStreams() {
     if (!Array.isArray(rows) || rows.length === 0) {
       return;
     }
-    const patients = rows.map(row => new Patient(row?.id,
+    const patients = rows.map(row => new Patient(
+      row?.id,
       row?.firstName,
       row?.lastName,
-      row?.data?.spO2,
-      row?.data?.heartRate,
+      row?.data?.spo2,
+      row?.data?.hr,
       row?.data?.IR,
-      row?.data?.accelX,
-      row?.data?.accelY,
-      row?.data?.accelZ,
-      row?.data?.responseTime,
-      row?.data?.answeredCorrectly,
+      row?.data?.accel_x,
+      row?.data?.accel_y,
+      row?.data?.accel_z,
+      row?.data?.response_time,
+      row?.data?.answered_correctly,
     ));
     return patients;
   } catch (err) {
