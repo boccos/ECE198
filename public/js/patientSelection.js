@@ -20,20 +20,18 @@ if (getCurrentPatient() != null) {
 }
 
 if (getLivePatient() === 'true') {
-    addLivePatient(getCurrentPatient());
     beginButton.style.display = 'none';
+    select.disabled = true;
 } else {
+    infoDiv.innerHTML = `<h3>${getCurrentPatient().getFullName()}'s information is currently being displayed!</h3>`;
     endButton.style.display = 'none';
 }
 
 select.addEventListener('change', (event) => {
-    console.log("hi");
     const selectedId = parseInt(select.value);
     const patient = patients.find(p => p.id === selectedId);
     setCurrentPatient(patient, false);
-    infoDiv.innerHTML = `
-        <h3>${patient.getFullName()}'s information is currently being displayed!</h3>
-        `;
+    infoDiv.innerHTML = `<h3>${getCurrentPatient().getFullName()}'s information is currently being displayed!</h3>`;
 });
 
 beginButton.addEventListener('click', function (event) {
@@ -45,8 +43,15 @@ beginButton.addEventListener('click', function (event) {
     const lastName = document.getElementById("lastName").value.trim();
     const patient = new Patient(select.length, firstName, lastName);
 
-    addLivePatient(patient);
+    const option = document.createElement("option");
+    option.value = patient.id;
+    option.textContent = patient.getFullName();
+    select.appendChild(option);
+    select.value = patient.id;
+    
     setCurrentPatient(patient, true);
+    select.disabled = true;
+    infoDiv.innerHTML = '';
     beginButton.style.display = 'none';
     endButton.style.display = 'block';
 });
@@ -57,14 +62,6 @@ endButton.addEventListener('click', function (event) {
     setCurrentPatient(getCurrentPatient(), false);
     beginButton.style.display = 'block';
     endButton.style.display = 'none';
+    infoDiv.innerHTML = `<h3>${getCurrentPatient().getFullName()}'s information is currently being displayed!</h3>`;
     // add JSON.stringify(getCurrentPatient) to streams+
 });
-
-function addLivePatient(patient) {
-    const option = document.createElement("option");
-    option.value = patient.id;
-    option.textContent = patient.getFullName();
-    select.appendChild(option);
-    select.value = patient.id;
-    select.disabled = true;
-}

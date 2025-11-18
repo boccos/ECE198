@@ -7,6 +7,7 @@ export function setCurrentPatient(patient, bool) {
 
 export function getCurrentPatient() {
     const saved = localStorage.getItem('currentPatient');
+    if (saved === 'undefined') return null;
     if (!saved) return null;
     const obj = JSON.parse(saved);
     return new Patient(

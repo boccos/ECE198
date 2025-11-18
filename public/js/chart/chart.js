@@ -1,18 +1,16 @@
 import updateLiveChart from "./liveChartData.js";
 import showPastChart from "./pastChartData.js";
-import { getCurrentPatient, getLivePatient} from '../currentPatient.js';
+import { getLivePatient } from '../currentPatient.js';
+import getDisplayText from './displayText.js';
 
-document.getElementById('patient-heartrate-message').textContent = 
-`The heart rate data of ${getCurrentPatient().getFullName()} from 
-${new Date(getCurrentPatient().getStartTs()).toLocaleString()} to 
-${new Date(getCurrentPatient().getEndTs()).toLocaleString()} is currently being displayed below.`;
+document.getElementById('display-message').textContent = getDisplayText('heart rate');
 
 let chart = new Chart(document.getElementById("chart"), {
   type: "line",
   data: {
     datasets: [{
       label: "Heart Rate",
-      data: [], 
+      data: [],
       borderColor: "red",
       fill: false,
     }]
