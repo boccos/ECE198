@@ -1,17 +1,18 @@
-import getAsyncCurrentPatient from "../liveFetcher.js"
-import { getCurrentPatient } from '../currentPatient.js';
+import updateLiveChart from "./liveChartData.js";
+import showPastChart from "./pastChartData.js";
+import { getCurrentPatient, getLivePatient} from '../currentPatient.js';
 
 document.getElementById('patient-heartrate-message').textContent = 
 `The heart rate data of ${getCurrentPatient().getFullName()} from 
 ${new Date(getCurrentPatient().getStartTs()).toLocaleString()} to 
 ${new Date(getCurrentPatient().getEndTs()).toLocaleString()} is currently being displayed below.`;
 
-let chart = new Chart(document.getElementById("liveGraphData"), {
+let chart = new Chart(document.getElementById("chart"), {
   type: "line",
   data: {
     datasets: [{
       label: "Heart Rate",
-      data: [], // will hold {x, y} objects
+      data: [], 
       borderColor: "red",
       fill: false,
     }]
@@ -21,7 +22,7 @@ let chart = new Chart(document.getElementById("liveGraphData"), {
     animation: false,
     scales: {
       x: {
-        type: "linear", // or "time" if x is a timestamp
+        type: "linear",
         title: {
           display: true,
           text: "Time",
@@ -37,19 +38,8 @@ let chart = new Chart(document.getElementById("liveGraphData"), {
   }
 });
 
-async function updateChart() {
-  try {
-    const patient = await getAsyncCurrentPatient();
-    chart.data.datasets[0].data = patient.heartRate; // assuming patient.heartRate exists
-    chart.update();
-    // console.log(JSON.stringify(patient));
-  } catch (err) {
-    console.error("Chart update failed:", err);
-  }
+if (getLivePatient() === 'true') {
+  updateLiveChart(chart);
+} else {
+  showPastChart(chart);
 }
-
-// Initial update
-updateChart();
-
-// Update every 5 seconds
-setInterval(updateChart, 5000);

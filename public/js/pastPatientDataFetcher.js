@@ -14,15 +14,16 @@ export default async function fetchStreams() {
       row?.lastName,
       row?.startTs,
       row?.endTs,
-      row?.data?.spo2,
-      row?.data?.hr,
+      row?.data?.spO2,
+      row?.data?.heartRate,
       row?.data?.IR,
-      row?.data?.accel_x,
-      row?.data?.accel_y,
-      row?.data?.accel_z,
-      row?.data?.response_time,
-      row?.data?.answered_correctly,
+      row?.data?.accelX,
+      row?.data?.accelY,
+      row?.data?.accelZ,
+      row?.data?.responseTime,
+      row?.data?.answeredCorrectly,
     ));
+    console.log(patients);
     return patients;
   } catch (err) {
     console.error('History fetch failed:', err);

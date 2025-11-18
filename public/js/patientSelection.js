@@ -1,5 +1,5 @@
 import Patient from "./patient.js"
-import fetchStreams from "./patientFetcher.js"
+import fetchStreams from "./pastPatientDataFetcher.js"
 import { setCurrentPatient } from './currentPatient.js';
 
 const patients = await fetchStreams();
