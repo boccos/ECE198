@@ -15,7 +15,9 @@ patients.forEach(patient => {
     select.appendChild(option);
 });
 
-select.value = getCurrentPatient().id;
+if (getCurrentPatient() != null) {
+    select.value = getCurrentPatient().id;
+}
 
 if (getLivePatient() === 'true') {
     addLivePatient(getCurrentPatient());
@@ -25,6 +27,7 @@ if (getLivePatient() === 'true') {
 }
 
 select.addEventListener('change', (event) => {
+    console.log("hi");
     const selectedId = parseInt(select.value);
     const patient = patients.find(p => p.id === selectedId);
     setCurrentPatient(patient, false);
