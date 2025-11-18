@@ -137,9 +137,11 @@ async function writeRecordToFiles(record) {
 
   const sessionActive = await getSessionActive();
   if (!sessionActive) {
-    // After End Session or before Begin Session: ignore incoming data
+    console.log('writeRecordToFiles: session NOT active, skipping write');   // <-- key log
     return;
   }
+
+  console.log('writeRecordToFiles: writing record for', record.patientId);   // <-- key log
 
   // history stream (current session only)
   const streamPath = path.join(STREAMS_DIR, `${record.patientId}.json`);
@@ -149,6 +151,7 @@ async function writeRecordToFiles(record) {
   const latestPath = path.join(LATEST_DIR, `${record.patientId}.json`);
   await fs.writeFile(latestPath, JSON.stringify(record, null, 2), 'utf-8');
 }
+
 
 // ---------------------------------------------------------
 // Auth
@@ -185,13 +188,20 @@ app.get('/health', (req, res) => {
 // - clears streams and latest
 // - marks session as active
 app.post('/api/v1/session/begin', async (req, res) => {
-  if (!authorized(req, res)) return;
+  console.log('SESSION BEGIN hit, x-api-key =', extractApiKey(req));   // <-- add this
+
+  if (!authorized(req, res)) {
+    console.log('SESSION BEGIN: unauthorized');                        // <-- add this
+    return;
+  }
 
   try {
     await ensureDirs();
     await clearDir(STREAMS_DIR);
     await clearDir(LATEST_DIR);
     await setSessionActive(true);
+
+    console.log('SESSION BEGIN: sessionActive set to true');           // <-- add this
 
     res.json({ ok: true, sessionActive: true });
   } catch (err) {
@@ -200,13 +210,19 @@ app.post('/api/v1/session/begin', async (req, res) => {
   }
 });
 
+
 // End Session:
 // - appends the whole current session (streams) into streams+
 // - clears streams and latest
 // - marks session as inactive
 // - after this, ingest writes are ignored until Begin Session again
 app.post('/api/v1/session/end', async (req, res) => {
-  if (!authorized(req, res)) return;
+  console.log('SESSION END hit, x-api-key =', extractApiKey(req));     // <-- add
+
+  if (!authorized(req, res)) {
+    console.log('SESSION END: unauthorized');                          // <-- add
+    return;
+  }
 
   try {
     await ensureDirs();
@@ -215,12 +231,15 @@ app.post('/api/v1/session/end', async (req, res) => {
     await clearDir(LATEST_DIR);
     await setSessionActive(false);
 
+    console.log('SESSION END: sessionActive set to false');            // <-- add
+
     res.json({ ok: true, sessionActive: false });
   } catch (err) {
     console.error('End session failed:', err);
     res.status(500).json({ ok: false, error: 'server_error' });
   }
 });
+
 
 // ---------------------------------------------------------
 // Ingest Endpoint (REAL IMPLEMENTATION used in BOTH modes)
