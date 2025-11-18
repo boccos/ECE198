@@ -1,12 +1,10 @@
 import Patient from "./patient.js"
 import fetchStreams from "./pastPatientDataFetcher.js"
-import { setCurrentPatient } from './currentPatient.js';
+import { setCurrentPatient, getCurrentPatient, getLivePatient } from './currentPatient.js';
 
 const patients = await fetchStreams();
 const select = document.getElementById('patient-select');
 const infoDiv = document.getElementById('patient-info');
-const addOption = select.querySelector('option[value="add"]');
-// const addPatient = document.getElementById('add-patient');
 
 patients.forEach(patient => {
     const option = document.createElement("option");
@@ -14,6 +12,9 @@ patients.forEach(patient => {
     option.textContent = patient.getFullName();
     select.appendChild(option);
 });
+if (getLivePatient() === 'true') {
+    addLivePatient(getCurrentPatient());
+}
 
 select.addEventListener('change', (event) => {
     const selectedId = parseInt(select.value);
@@ -24,16 +25,28 @@ select.addEventListener('change', (event) => {
         `;
 });
 
-document.getElementById("patient-form").addEventListener("submit", function (event) {
+document.getElementById('begin-collection').addEventListener('click', function (event) {
     event.preventDefault();
     const firstName = document.getElementById("firstName").value.trim();
     const lastName = document.getElementById("lastName").value.trim();
-    const patient = new Patient(select.length - 1, firstName, lastName);
+    const patient = new Patient(select.length, firstName, lastName);
 
+    addLivePatient(patient);
+    setCurrentPatient(patient, true);
+});
+
+document.getElementById('end-collection').addEventListener('click', function (event) {
+    event.preventDefault();
+    select.disabled = false;
+    console.log("hi");
+    // add to streams+
+});
+
+function addLivePatient(patient) {
     const option = document.createElement("option");
     option.value = patient.id;
     option.textContent = patient.getFullName();
-    select.insertBefore(option, addOption);
+    select.appendChild(option);
     select.value = patient.id;
-    setCurrentPatient(patient, true);
-});
+    select.disabled = true;
+}
