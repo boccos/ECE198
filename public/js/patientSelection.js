@@ -5,6 +5,8 @@ import { setCurrentPatient, getCurrentPatient, getLivePatient } from './currentP
 const patients = await fetchStreams();
 const select = document.getElementById('patient-select');
 const infoDiv = document.getElementById('patient-info');
+const beginButton = document.getElementById('begin-collection');
+const endButton = document.getElementById('end-collection');
 
 patients.forEach(patient => {
     const option = document.createElement("option");
@@ -12,8 +14,14 @@ patients.forEach(patient => {
     option.textContent = patient.getFullName();
     select.appendChild(option);
 });
+
+select.value = getCurrentPatient().id;
+
 if (getLivePatient() === 'true') {
     addLivePatient(getCurrentPatient());
+    beginButton.style.display = 'none';
+} else {
+    endButton.style.display = 'none';
 }
 
 select.addEventListener('change', (event) => {
@@ -25,7 +33,10 @@ select.addEventListener('change', (event) => {
         `;
 });
 
-document.getElementById('begin-collection').addEventListener('click', function (event) {
+beginButton.addEventListener('click', function (event) {
+    if (!document.getElementById("patient-form").checkValidity()) {
+        return;
+    }
     event.preventDefault();
     const firstName = document.getElementById("firstName").value.trim();
     const lastName = document.getElementById("lastName").value.trim();
@@ -33,13 +44,17 @@ document.getElementById('begin-collection').addEventListener('click', function (
 
     addLivePatient(patient);
     setCurrentPatient(patient, true);
+    beginButton.style.display = 'none';
+    endButton.style.display = 'block';
 });
 
-document.getElementById('end-collection').addEventListener('click', function (event) {
+endButton.addEventListener('click', function (event) {
     event.preventDefault();
     select.disabled = false;
-    console.log("hi");
-    // add to streams+
+    setCurrentPatient(getCurrentPatient(), false);
+    beginButton.style.display = 'block';
+    endButton.style.display = 'none';
+    // add JSON.stringify(getCurrentPatient) to streams+
 });
 
 function addLivePatient(patient) {
