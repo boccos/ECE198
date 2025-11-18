@@ -3,15 +3,16 @@
     "id": "p001",
     "firstName": "John",
     "lastName": "Doe",
+    "startTs": 1763347696571,
     "data": {
-      "spO2": 0,
-      "heartRate": 0,
-      "IR": 0,
-      "accelX": 0,
-      "accelY": 0,
-      "accelZ": 0,
-      "responseTime": 0,
-      "answeredCorrectly": 0
+      "spO2": [],
+      "heartRate": [1, 2, 3, 4, 5, 6, 5],
+      "IR": [],
+      "accelX": [],
+      "accelY": [],
+      "accelZ": [],
+      "responseTime": [],
+      "answeredCorrectly": []
     },
     "serverTs": 1762904359803
   },
@@ -20,14 +21,14 @@
     "firstName": "Jane",
     "lastName": "Smith",
     "data": {
-      "spO2": 0,
-      "heartRate": 0,
-      "IR": 0,
-      "accelX": 0,
-      "accelY": 0,
-      "accelZ": 0,
-      "responseTime": 0,
-      "answeredCorrectly": 0
+      "spO2": [],
+      "heartRate": [],
+      "IR": [],
+      "accelX": [],
+      "accelY": [],
+      "accelZ": [],
+      "responseTime": [],
+      "answeredCorrectly": []
     },
     "serverTs": 1762904359835
   },
@@ -36,14 +37,14 @@
     "firstName": "Bob",
     "lastName": "Ross",
     "data": {
-      "spO2": 0,
-      "heartRate": 0,
-      "IR": 0,
-      "accelX": 0,
-      "accelY": 0,
-      "accelZ": 0,
-      "responseTime": 0,
-      "answeredCorrectly": 0
+      "spO2": [],
+      "heartRate": [],
+      "IR": [],
+      "accelX": [],
+      "accelY": [],
+      "accelZ": [],
+      "responseTime": [],
+      "answeredCorrectly": []
     },
     "serverTs": 1762904359862
   }

@@ -4,10 +4,10 @@
     <link rel="stylesheet" href="css/styles.css">
     <script src="js/logOut.js" defer></script>
     <script src="js/passwordAuthentication.js" defer></script>
-    <!-- <script src="js/liveFetcher.js" type="module" defer></script> -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/toggleViewMode.js" defer></script>
-
+    <script type="module" src="js/graph/liveGraphData.js"></script>
+    
     <meta charset="UTF-8">
     <title>ECE 198</title>
 </head>
@@ -29,9 +29,9 @@
                 </nav>
             </div>
         </header>
+        <div id="patient-heartrate-message"></div>
         <!-- Test Graph -->
-        <div style="width: 800px;"><canvas id="testGraphData"></canvas></div>
-        <script type="module" src="js/testGraphData.js"></script>
+        <div style="width: 800px;"><canvas id="liveGraphData"></canvas></div>
     </div>
     <div id="password-protected-warning" hidden>
         <h1>Please log into the application</h1>

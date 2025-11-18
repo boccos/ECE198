@@ -5,10 +5,10 @@ export default class Patient {
     } else {
       this.id = id;
     }
-    this.startTs = startTs;
-    this.endTs = endTs;
     this.firstName = firstName;
     this.lastName = lastName;
+    this.startTs = startTs;
+    this.endTs = endTs;
     this.spO2 = spO2;
     this.heartRate = heartRate;
     this.IR = IR;
@@ -23,8 +23,16 @@ export default class Patient {
     this.id = id;
   }
 
+  getStartTs() {
+    return this.startTs;
+  }
+  
   setStartTs(startTs) {
     this.startTs = startTs;
+  }
+
+  getEndTs() {
+    return this.endTs;
   }
 
   setEndTs(endTs) {
