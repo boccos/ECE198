@@ -10,7 +10,10 @@ const fssync = require('fs');
 // Config / Constants
 // ---------------------------------------------------------
 
-const ENABLE_MOCK_INGEST = process.env.ENABLE_MOCK_INGEST === 'true'; // Code for Testing
+// TESTING FLAG:
+// - For TESTING with mock data:  set ENABLE_MOCK_INGEST=true  in .env
+// - For REAL IMPLEMENTATION:     set ENABLE_MOCK_INGEST=false (or remove it)
+const ENABLE_MOCK_INGEST = process.env.ENABLE_MOCK_INGEST === 'true';
 
 const PORT = process.env.PORT || 3000;
 const API_TOKEN = 'banana' || process.env.INGEST_TOKEN; // change in prod
@@ -23,6 +26,8 @@ app.use(express.static(path.resolve(__dirname, 'public')));
 const DATA_DIR = path.resolve(__dirname, 'data');
 const STREAMS_DIR = path.join(DATA_DIR, 'streams');
 const LATEST_DIR = path.join(DATA_DIR, 'latest');
+const STREAMS_PLUS_DIR = path.join(DATA_DIR, 'streams+');   // holds all past sessions
+const SESSION_FILE = path.join(DATA_DIR, 'session.json');   // stores session active/inactive
 
 // ---- auth helpers (allow header OR body-provided API_KEY) ----
 const TOKEN_STR = process.env.INGEST_TOKENS || process.env.INGEST_TOKEN || 'banana';
@@ -36,6 +41,21 @@ const TOKENS = TOKEN_STR.split(',').map(s => s.trim()).filter(Boolean);
 async function ensureDirs() {
   await fs.mkdir(STREAMS_DIR, { recursive: true });
   await fs.mkdir(LATEST_DIR, { recursive: true });
+  await fs.mkdir(STREAMS_PLUS_DIR, { recursive: true });
+}
+
+// clear all files in a directory (but keep the directory itself)
+async function clearDir(dirPath) {
+  try {
+    const entries = await fs.readdir(dirPath, { withFileTypes: true });
+    await Promise.all(
+      entries.map(entry =>
+        fs.rm(path.join(dirPath, entry.name), { recursive: true, force: true })
+      )
+    );
+  } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
+  }
 }
 
 async function readJsonArray(filePath) {
@@ -57,15 +77,75 @@ async function appendToHistoryJson(filePath, record, maxLen = 0) {
   await fs.writeFile(filePath, JSON.stringify(arr, null, 2), 'utf-8');
 }
 
-// Code for Testing
+// ---------------------------------------------------------
+// Session State Helpers
+// ---------------------------------------------------------
+
+async function getSessionActive() {
+  try {
+    const txt = await fs.readFile(SESSION_FILE, 'utf-8');
+    const obj = JSON.parse(txt);
+    return !!obj.active;
+  } catch {
+    // default: no active session until Begin Session is pressed
+    return false;
+  }
+}
+
+async function setSessionActive(active) {
+  await fs.writeFile(
+    SESSION_FILE,
+    JSON.stringify(
+      {
+        active: !!active,
+        updatedAt: new Date().toISOString()
+      },
+      null,
+      2
+    ),
+    'utf-8'
+  );
+}
+
+// copy / append everything from streams → streams+ (used on End Session)
+async function appendSessionToStreamsPlus() {
+  await ensureDirs();
+  const files = await fs.readdir(STREAMS_DIR);
+
+  for (const file of files) {
+    if (!file.endsWith('.json')) continue;
+
+    const srcPath = path.join(STREAMS_DIR, file);
+    const destPath = path.join(STREAMS_PLUS_DIR, file);
+
+    const sessionRecords = await readJsonArray(srcPath);
+    if (!sessionRecords.length) continue;
+
+    const existing = await readJsonArray(destPath);
+    existing.push(...sessionRecords);
+
+    await fs.writeFile(destPath, JSON.stringify(existing, null, 2), 'utf-8');
+  }
+}
+
+// ---------------------------------------------------------
+// Central Write Logic (used by BOTH testing + real ingestion)
+// ---------------------------------------------------------
+
 async function writeRecordToFiles(record) {
   await ensureDirs();
 
-  // history stream
+  const sessionActive = await getSessionActive();
+  if (!sessionActive) {
+    // After End Session or before Begin Session: ignore incoming data
+    return;
+  }
+
+  // history stream (current session only)
   const streamPath = path.join(STREAMS_DIR, `${record.patientId}.json`);
   await appendToHistoryJson(streamPath, record, 0); // 0 = no cap
 
-  // latest snapshot
+  // latest snapshot (overwritten each time)
   const latestPath = path.join(LATEST_DIR, `${record.patientId}.json`);
   await fs.writeFile(latestPath, JSON.stringify(record, null, 2), 'utf-8');
 }
@@ -97,8 +177,55 @@ app.get('/health', (req, res) => {
   res.json({ ok: true, time: new Date().toISOString() });
 });
 
-// ESP32 ingest endpoint
-// ESP32 ingest endpoint
+// ---------------------------------------------------------
+// Session control (Begin / End)
+// ---------------------------------------------------------
+
+// Begin Session:
+// - clears streams and latest
+// - marks session as active
+app.post('/api/v1/session/begin', async (req, res) => {
+  if (!authorized(req, res)) return;
+
+  try {
+    await ensureDirs();
+    await clearDir(STREAMS_DIR);
+    await clearDir(LATEST_DIR);
+    await setSessionActive(true);
+
+    res.json({ ok: true, sessionActive: true });
+  } catch (err) {
+    console.error('Begin session failed:', err);
+    res.status(500).json({ ok: false, error: 'server_error' });
+  }
+});
+
+// End Session:
+// - appends the whole current session (streams) into streams+
+// - clears streams and latest
+// - marks session as inactive
+// - after this, ingest writes are ignored until Begin Session again
+app.post('/api/v1/session/end', async (req, res) => {
+  if (!authorized(req, res)) return;
+
+  try {
+    await ensureDirs();
+    await appendSessionToStreamsPlus();
+    await clearDir(STREAMS_DIR);
+    await clearDir(LATEST_DIR);
+    await setSessionActive(false);
+
+    res.json({ ok: true, sessionActive: false });
+  } catch (err) {
+    console.error('End session failed:', err);
+    res.status(500).json({ ok: false, error: 'server_error' });
+  }
+});
+
+// ---------------------------------------------------------
+// Ingest Endpoint (REAL IMPLEMENTATION used in BOTH modes)
+// ---------------------------------------------------------
+
 app.post('/api/v1/ingest', async (req, res) => {
   if (!authorized(req, res)) return;
 
@@ -172,7 +299,10 @@ app.post('/api/v1/ingest', async (req, res) => {
     return res.status(400).json({ ok: false, error: 'invalid_payload' });
   }
 
-  // Code for Testing (Uncomment below to restore normal operation)
+  // NOTE:
+  // - This block is used for BOTH testing and real ESP32 ingestion.
+  // - The ONLY difference between "testing" and "real" is whether
+  //   we also generate mock data elsewhere.
   try {
     await writeRecordToFiles(record);
     res.status(202).json({ ok: true });
@@ -180,23 +310,6 @@ app.post('/api/v1/ingest', async (req, res) => {
     console.error('Ingest write failed:', err);
     res.status(500).json({ ok: false, error: 'server_error' });
   }
-
-  /*try {
-    await ensureDirs();
-
-    // --- write to history JSON array ---
-    const streamPath = path.join(STREAMS_DIR, `${patientId}.json`);
-    await appendToHistoryJson(streamPath, record, 0); // optional cap
-
-    // --- write latest snapshot ---
-    const latestPath = path.join(LATEST_DIR, `${patientId}.json`);
-    await fs.writeFile(latestPath, JSON.stringify(record, null, 2), 'utf-8');
-
-    res.status(202).json({ ok: true });
-  } catch (err) {
-    console.error('Ingest write failed:', err);
-    res.status(500).json({ ok: false, error: 'server_error' });
-  } */
 });
 
 // latest snapshot (handy for quick checks/front-end)
@@ -228,7 +341,8 @@ app.use((req, res) => res.status(404).send('resource not found'));
 // Mock / Testing Helpers
 // ---------------------------------------------------------
 
-// Code for testing
+// === TESTING-ONLY HELPER ===
+// Safe to leave in production, but you can delete/comment if you want.
 function makeMockRecord(patientId = 'p001') {
   return {
     patientId,
@@ -253,7 +367,10 @@ function makeMockRecord(patientId = 'p001') {
 // Startup
 // ---------------------------------------------------------
 
-// Code for Testing
+// === OPTION 1: TESTING CONFIGURATION (WITH MOCK INGEST) ===
+// This is ACTIVE right now.
+// - It starts the server
+// - If ENABLE_MOCK_INGEST=true in .env, it writes fake data every 5 seconds.
 ensureDirs().then(() => {
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
@@ -276,7 +393,11 @@ ensureDirs().then(() => {
   process.exit(1);
 });
 
-// start
+// === OPTION 2: PRODUCTION CONFIGURATION (NO MOCK INGEST) ===
+// This is COMMENTED OUT right now. Use this when you want only real ESP32 data.
+// To switch to production mode later:
+//   1) Comment out the TESTING block above
+//   2) Uncomment the block below
 /*
 ensureDirs().then(() => {
   app.listen(PORT, () => {

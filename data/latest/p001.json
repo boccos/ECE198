@@ -2,14 +2,14 @@
   "patientId": "p001",
   "sensor": "esp32",
   "data": {
-    "spo2": 100,
-    "hr": 94,
-    "IR": 527,
-    "accel_x": 300.2252471137082,
-    "accel_y": 31.027149257078424,
-    "accel_z": 335.2015103157634,
-    "response_time": 3.079369850202218,
+    "spo2": 92,
+    "hr": 78,
+    "IR": 650,
+    "accel_x": 222.571227085155,
+    "accel_y": 24.215892308844644,
+    "accel_z": 268.6395433001568,
+    "response_time": 2.5699823347206365,
     "answered_correctly": true
   },
-  "serverTs": 1763347696571
+  "serverTs": 1763499243732
 }

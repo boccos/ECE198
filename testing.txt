@@ -1,0 +1,12 @@
+Quick switching guide
+
+    Testing mode (mock data + session logic):
+    In .env, set ENABLE_MOCK_INGEST=true.
+    Uncomment the TESTING CONFIGURATION startup block.
+    Comment out the PRODUCTION CONFIGURATION startup block.
+
+Proper/real implementation (ESP32 only, no mock):
+    
+    In .env, set ENABLE_MOCK_INGEST=false (or remove it).
+    Make sure the PRODUCTION CONFIGURATION startup block at the bottom is uncommented.
+    Leave the TESTING block commented out.

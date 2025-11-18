@@ -1,2 +1,51 @@
-// Begin Session, Clear Streams
-// End Session, Append Streams to Streams+, clear Streams
+[
+  {
+    "id": "p001",
+    "firstName": "John",
+    "lastName": "Doe",
+    "startTs": 1763347696571,
+    "data": {
+      "spO2": [],
+      "heartRate": [[100, 1], [200, 2], [300, 3], [400, 4], [500, 5], [600, 6], [700, 5]],
+      "IR": [],
+      "accelX": [],
+      "accelY": [],
+      "accelZ": [],
+      "responseTime": [],
+      "answeredCorrectly": []
+    },
+    "serverTs": 1762904359803
+  },
+  {
+    "id": "p002",
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "data": {
+      "spO2": [],
+      "heartRate": [],
+      "IR": [],
+      "accelX": [],
+      "accelY": [],
+      "accelZ": [],
+      "responseTime": [],
+      "answeredCorrectly": []
+    },
+    "serverTs": 1762904359835
+  },
+  {
+    "id": "p003",
+    "firstName": "Bob",
+    "lastName": "Ross",
+    "data": {
+      "spO2": [],
+      "heartRate": [],
+      "IR": [],
+      "accelX": [],
+      "accelY": [],
+      "accelZ": [],
+      "responseTime": [],
+      "answeredCorrectly": []
+    },
+    "serverTs": 1762904359862
+  }
+]
