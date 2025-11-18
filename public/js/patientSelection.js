@@ -16,8 +16,9 @@ patients.forEach(patient => {
 });
 
 select.addEventListener('change', (event) => {
-        const selectedId = parseInt(select.value);
-        const patient = patients.find(p => p.id === selectedId);
+    const selectedId = parseInt(select.value);
+    const patient = patients.find(p => p.id === selectedId);
+    setCurrentPatient(patient, false);
     infoDiv.innerHTML = `
         <h3>${patient.getFullName()}'s information is currently being displayed!</h3>
         `;
@@ -34,5 +35,5 @@ document.getElementById("patient-form").addEventListener("submit", function (eve
     option.textContent = patient.getFullName();
     select.insertBefore(option, addOption);
     select.value = patient.id;
-    setCurrentPatient(patient);
+    setCurrentPatient(patient, true);
 });

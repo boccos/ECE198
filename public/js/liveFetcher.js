@@ -1,4 +1,4 @@
-import { getCurrentPatient } from './currentPatient.js';
+import { getCurrentPatient, setCurrentPatient} from './currentPatient.js';
 
 const INTERVAL_MS = 5000;
 
@@ -9,6 +9,7 @@ export default async function getAsyncCurrentPatient() {
     return null;
   }
   await fetchLatest();
+  setCurrentPatient(currentPatient, true);
   return currentPatient;
 }
 
@@ -38,7 +39,7 @@ async function fetchStreams() {
 async function fetchLatest() {
   if (isFetching) return;
   isFetching = true;
-
+  
   try {
     const res = await fetch(`/api/v1/patients/p001/latest`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);

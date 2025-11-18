@@ -1,7 +1,8 @@
 import Patient from "./patient.js"
 
-export function setCurrentPatient(patient) {
+export function setCurrentPatient(patient, bool) {
     localStorage.setItem('currentPatient', JSON.stringify(patient));
+    localStorage.setItem('livePatient', bool);
 }
 
 export function getCurrentPatient() {
@@ -14,13 +15,17 @@ export function getCurrentPatient() {
       obj?.lastName,
       obj?.startTs,
       obj?.endTs,
-      obj?.data?.spo2,
-      obj?.data?.hr,
-      obj?.data?.IR,
-      obj?.data?.accel_x,
-      obj?.data?.accel_y,
-      obj?.data?.accel_z,
-      obj?.data?.response_time,
-      obj?.data?.answered_correctly,
+      obj?.spO2,
+      obj?.heartRate,
+      obj?.IR,
+      obj?.accelX,
+      obj?.accelY,
+      obj?.accelZ,
+      obj?.responseTime,
+      obj?.answeredCorrectly,
     )
+}
+
+export function getLivePatient() {
+    return localStorage.getItem('livePatient');
 }

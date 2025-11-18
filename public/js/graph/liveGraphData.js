@@ -1,6 +1,12 @@
-import getCurrentPatient from "./liveFetcher.js"
+import getAsyncCurrentPatient from "../liveFetcher.js"
+import { getCurrentPatient } from '../currentPatient.js';
 
-let chart = new Chart(document.getElementById("testGraphData"), {
+document.getElementById('patient-heartrate-message').textContent = 
+`The heart rate data of ${getCurrentPatient().getFullName()} from 
+${new Date(getCurrentPatient().getStartTs()).toLocaleString()} to 
+${new Date(getCurrentPatient().getEndTs()).toLocaleString()} is currently being displayed below.`;
+
+let chart = new Chart(document.getElementById("liveGraphData"), {
   type: "line",
   data: {
     datasets: [{
@@ -33,9 +39,10 @@ let chart = new Chart(document.getElementById("testGraphData"), {
 
 async function updateChart() {
   try {
-    const patient = await getCurrentPatient();
+    const patient = await getAsyncCurrentPatient();
     chart.data.datasets[0].data = patient.heartRate; // assuming patient.heartRate exists
     chart.update();
+    // console.log(JSON.stringify(patient));
   } catch (err) {
     console.error("Chart update failed:", err);
   }
