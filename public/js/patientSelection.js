@@ -1,12 +1,12 @@
 import Patient from "./patient.js";
-import fetchStreams from "./pastPatientDataFetcher.js";
+import fetchPastStreams from "./pastPatientDataFetcher.js";
+import { fetchStreams } from "./livePatientDataFetcher.js"
 import { setCurrentPatient, getCurrentPatient, getLivePatient } from "./currentPatient.js";
 
 const API_KEY = "banana"; // MUST match your backend INGEST_TOKEN / INGEST_TOKENS
 
-const patients = await fetchStreams();
+const patients = await fetchPastStreams();
 const select = document.getElementById("patient-select");
-const infoDiv = document.getElementById("patient-info");
 const beginButton = document.getElementById("begin-collection");
 const endButton = document.getElementById("end-collection");
 
@@ -18,20 +18,21 @@ patients.forEach((patient) => {
   select.appendChild(option);
 });
 
-if (getCurrentPatient() != null) {
-  select.value = getCurrentPatient().id;
-}
 
 if (getLivePatient() === "true") {
   // there's an active live patient
+  addPatient(getCurrentPatient());
   beginButton.style.display = "none";
   select.disabled = true;
 } else if (getCurrentPatient() != null) {
-  infoDiv.innerHTML = `<h3>${getCurrentPatient().getFullName()}'s information is currently being displayed!</h3>`;
   endButton.style.display = "none";
 } else {
   // no current patient yet
   endButton.style.display = "none";
+}
+
+if (getCurrentPatient() != null) {
+  select.value = getCurrentPatient().id;
 }
 
 // ----------------- Patient change handler -----------------
@@ -41,7 +42,6 @@ select.addEventListener("change", (event) => {
   if (!patient) return;
 
   setCurrentPatient(patient, false);
-  infoDiv.innerHTML = `<h3>${patient.getFullName()}'s information is currently being displayed!</h3>`;
 });
 
 // ----------------- BEGIN COLLECTION -----------------
@@ -56,15 +56,11 @@ beginButton.addEventListener("click", async function (event) {
   const patient = new Patient(select.length, firstName, lastName);
 
   // Add new patient to dropdown and select it
-  const option = document.createElement("option");
-  option.value = patient.id;
-  option.textContent = patient.getFullName();
-  select.appendChild(option);
-  select.value = patient.id;
+  addPatient(patient);
 
   setCurrentPatient(patient, true);
+  console.log("patient set!");
   select.disabled = true;
-  infoDiv.innerHTML = "";
   beginButton.style.display = "none";
   endButton.style.display = "block";
 
@@ -95,10 +91,18 @@ beginButton.addEventListener("click", async function (event) {
 endButton.addEventListener("click", async function (event) {
   event.preventDefault();
   select.disabled = false;
-  setCurrentPatient(getCurrentPatient(), false);
+
+  const patient = await fetchStreams(getCurrentPatient());
+  console.log("final patient: ");
+  console.log(patient);
+  if (patient.spO2.length === 0) {
+    confirm("No data has been collected yet. Please wait.");
+    return;
+  }
+  patient.setEndTs(patient.getStartTs() + patient.spO2[patient.spO2.length - 1][0]);
+  setCurrentPatient(patient, false);
   beginButton.style.display = "block";
   endButton.style.display = "none";
-  infoDiv.innerHTML = `<h3>${getCurrentPatient().getFullName()}'s information is currently being displayed!</h3>`;
 
   // 🔴 Tell backend to END SESSION (streams → streams+, clear streams/latest, set inactive)
   try {
@@ -110,7 +114,6 @@ endButton.addEventListener("click", async function (event) {
       },
       body: JSON.stringify(getCurrentPatient()),
     });
-
     const data = await res.json().catch(() => ({}));
     console.log("[UI] /session/end response:", res.status, data);
 
@@ -123,4 +126,12 @@ endButton.addEventListener("click", async function (event) {
   }
 })
 
+
+function addPatient(patient) {
+  const option = document.createElement("option");
+  option.value = patient.id;
+  option.textContent = patient.getFullName();
+  select.appendChild(option);
+  select.value = patient.id;
+}
 

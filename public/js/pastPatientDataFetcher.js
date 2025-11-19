@@ -18,14 +18,14 @@ export default async function fetchStreams() {
       row?.lastName,
       row?.startTs,
       row?.endTs,
-      row?.data?.spO2,
-      row?.data?.heartRate,
-      row?.data?.IR,
-      row?.data?.accelX,
-      row?.data?.accelY,
-      row?.data?.accelZ,
-      row?.data?.responseTime,
-      row?.data?.answeredCorrectly,
+      row?.spO2,
+      row?.heartRate,
+      row?.IR,
+      row?.accelX,
+      row?.accelY,
+      row?.accelZ,
+      row?.responseTime,
+      row?.answeredCorrectly,
     ));
     return patients;
   } catch (err) {

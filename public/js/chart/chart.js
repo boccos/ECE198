@@ -3,7 +3,7 @@ import showPastChart from "./pastChartData.js";
 import { getLivePatient } from '../currentPatient.js';
 import getDisplayText from './displayText.js';
 
-document.getElementById('display-message').textContent = getDisplayText('heart rate');
+document.getElementById('display-message').innerHTML = getDisplayText('Heart-Rate');
 
 let chart = new Chart(document.getElementById("chart"), {
   type: "line",

@@ -1,8 +1,10 @@
-import { getCurrentPatient, setCurrentPatient} from './currentPatient.js';
-
-const INTERVAL_MS = 5000;
+import { getCurrentPatient, setCurrentPatient, getLivePatient} from './currentPatient.js';
 
 const currentPatient = getCurrentPatient();
+
+if (getLivePatient() === 'true' && currentPatient != null) {
+  fetchStreams(currentPatient);
+}
 
 export default async function getAsyncCurrentPatient() {
   if (currentPatient == null) {
@@ -13,11 +15,10 @@ export default async function getAsyncCurrentPatient() {
   return currentPatient;
 }
 
-let firstServerTs = null;
-
 let isFetching = false;
 
-async function fetchStreams() {
+export async function fetchStreams(patient) {
+  patient.clearData();
   try {
     const res = await fetch(`/api/v1/patients/p001/download`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -26,11 +27,9 @@ async function fetchStreams() {
       return;
     }
     for (const row of rows) {
-      if (firstServerTs === null) {
-        firstServerTs = row?.serverTs;
-      }
-      currentPatient.updateData(row?.serverTs - firstServerTs, row?.data);
+      patient.updateData(row?.serverTs, row?.data);
     }
+    return patient;
   } catch (err) {
     console.error('History fetch failed:', err);
   }
@@ -44,16 +43,10 @@ async function fetchLatest() {
     const res = await fetch(`/api/v1/patients/p001/latest`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const rows = await res.json();
-    currentPatient.updateData(rows?.serverTs - firstServerTs, rows?.data);
+    currentPatient.updateData(rows?.serverTs, rows?.data);
   } catch (err) {
     console.error('Live fetch failed:', err);
   } finally {
     isFetching = false;
   }
-}
-
-if (currentPatient != null) {
-  fetchStreams();
-  fetchLatest();
-  setInterval(fetchLatest, INTERVAL_MS);
 }
