@@ -1,16 +1,26 @@
 import getAsyncCurrentPatient from "../livePatientDataFetcher.js"
 
-async function asyncUpdateChart(chart) {
+async function asyncUpdateChart(chart, cmd) {
   try {
     const patient = await getAsyncCurrentPatient();
-    chart.data.datasets[0].data = patient.heartRate;
+    switch (cmd) {
+      case "spO2":
+        chart.data.datasets[0].data = patient.spO2;
+        break;
+      case "hr":
+        chart.data.datasets[0].data = patient.heartRate;
+        break;
+      case "IR":
+        chart.data.datasets[0].data = patient.IR;
+        break;
+    }
     chart.update();
   } catch (err) {
     console.error("Chart update failed:", err);
   }
 }
 
-export default function updateChart(chart) {
-  asyncUpdateChart(chart);
-  setInterval(() => asyncUpdateChart(chart), 5000)
+export default function updateChart(chart, cmd) {
+  asyncUpdateChart(chart, cmd);
+  setInterval(() => asyncUpdateChart(chart, cmd), 5000)
 }

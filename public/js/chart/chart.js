@@ -37,7 +37,7 @@ let chart = new Chart(document.getElementById("chart"), {
 });
 
 if (getLivePatient() === 'true') {
-  updateLiveChart(chart);
+  updateLiveChart(chart, "hr");
 } else {
-  showPastChart(chart);
+  showPastChart(chart, "hr");
 }

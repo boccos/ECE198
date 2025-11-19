@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <script src="js/logOut.js" defer></script>
     <script src="js/passwordAuthentication.js" defer></script>
-    <script src="survey.js"></script>
+    <script src="js/LED.js"></script>
     <script src="js/toggleViewMode.js" defer></script>
 
     <meta charset="UTF-8">
@@ -22,24 +22,16 @@
                     <button onclick="window.location.href='heartrate.html'">Heart Rate</button>
                     <button onclick="window.location.href='spo2.html'">SPO2</button>
                     <button onclick="window.location.href='sleep-logs.html'">Sleep Logs</button>
-                    <button onclick="window.location.href='survey.html'">Survey Results</button>
+                    <button onclick="window.location.href='LED.html'">Survey Results</button>
                     <button id="toggleViewMode">🌙</button>
                     <button id="logoutBtn">Logout</button>
                 </nav>
             </div>
         </header>
-        <h1>Simple Survey</h1>
-        <form id="surveyForm">
-
-            <label>How satisfied are you with our service?</label><br><br>
-
-            <label for="feedback">Additional Feedback:</label><br>
-            <textarea id="feedback" name="feedback"></textarea><br><br>
-
-            <button type="submit">Submit</button>
-        </form>
-
-        <div id="result"></div>
+        <button type="submit" id="left-LED-button">Left Button</button>
+        <button type="submit" id="right-LED-button">Right Button</button><br>
+        <button type="submit" id="left-off-LED-button">Left Off</button>
+        <button type="submit" id="right-off-LED-button">Right Off</button>
     </div>
     <div id="password-protected-warning" hidden>
         <h1>Please log into the application</h1>
