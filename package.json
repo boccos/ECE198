@@ -7,6 +7,11 @@
     "start": "node ./app.js",
     "dev": "nodemon ./app.js"
   },
+  "nodemonConfig": {
+    "watch": ["app.js", "public"],
+    "ext": "js,mjs,cjs",
+    "ignore": ["data/*", "data/**"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/boccos/ECE198.git"
