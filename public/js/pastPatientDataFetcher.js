@@ -3,10 +3,14 @@ import Patient from "./patient.js"
 export default async function fetchStreams() {
   try {
     const res = await fetch(`/api/v1/patients/patientData/download`);
+    if (res.status === 404) {
+      console.info("[fetchStreams] No patientData.json yet, returning []");
+      return [];
+    }
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const rows = await res.json();
     if (!Array.isArray(rows) || rows.length === 0) {
-      return;
+      return [];
     }
     const patients = rows.map(row => new Patient(
       row?.id,
@@ -26,5 +30,6 @@ export default async function fetchStreams() {
     return patients;
   } catch (err) {
     console.error('History fetch failed:', err);
+    return [];
   }
 }
