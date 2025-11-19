@@ -2,7 +2,7 @@
 
 /* Light mode (default) */
 body {
-  --bg-color: rgba(222, 237, 255, 0.3);
+  --bg-color: rgba(193, 225, 255, 0.3);
 
   --header-grad-top: rgba(146, 146, 146, 0.9);
   --header-grad-bottom: rgba(239, 239, 239, 0.5);
@@ -116,7 +116,8 @@ header::before {
   padding: 10px 22px;
   border-radius: 8px;
   color: white;
-  font-size: 18px;
+  font-size: 15px;
+  line-height: 1;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.15s ease;
