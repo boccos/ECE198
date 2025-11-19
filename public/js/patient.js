@@ -15,6 +15,11 @@ export default class Patient {
     this.accelX = accelX;
     this.accelY = accelY;
     this.accelZ = accelZ;
+    this.accel = [];
+    for (let i = 0; i < accelX.length; i++) {
+      console.log([accelX[i][0], Math.sqrt(accelX[i][1] * accelX[i][1] + accelY[i][1] * accelY[i][1] + accelZ[i][1] * accelZ[i][1])]);
+      this.accel.push([accelX[i][0], Math.sqrt(accelX[i][1] * accelX[i][1] + accelY[i][1] * accelY[i][1] + accelZ[i][1] * accelZ[i][1])]);
+    }
     this.responseTime = responseTime;
     this.answeredCorrectly = answeredCorrectly;
   }
@@ -57,6 +62,7 @@ export default class Patient {
     this.accelX.push([deltaTime, data?.accel_x]);
     this.accelY.push([deltaTime, data?.accel_y]);
     this.accelZ.push([deltaTime, data?.accel_z]);
+    this.accel.push([deltaTime, Math.sqrt(data?.accel_x * data?.accel_x + data?.accel_y * data?.accel_y + data?.accel_z * data?.accel_z)]);
     this.responseTime.push([deltaTime, data?.response_time]);
     this.answeredCorrectly.push([deltaTime, data?.answered_correctly]);
   }
@@ -68,6 +74,7 @@ export default class Patient {
     this.accelX = [];
     this.accelY = [];
     this.accelZ = [];
+    this.accel = [];
     this.responseTime = [];
     this.answeredCorrectly = [];
   }

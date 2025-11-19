@@ -12,6 +12,9 @@ export default async function showChart(chart, cmd) {
       case "IR":
         chart.data.datasets[0].data = getCurrentPatient().IR;
         break;
+      case "acc":
+        chart.data.datasets[0].data = getCurrentPatient().accel;
+        break;
     }
     chart.update();
   } catch (err) {

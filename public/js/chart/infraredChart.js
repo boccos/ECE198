@@ -3,13 +3,13 @@ import showPastChart from "./pastChartData.js";
 import { getLivePatient } from '../currentPatient.js';
 import getDisplayText from './displayText.js';
 
-document.getElementById('display-message').innerHTML = getDisplayText('Sleep');
+document.getElementById('display-message').innerHTML = getDisplayText('Infrared');
 
 let chart = new Chart(document.getElementById("chart"), {
   type: "line",
   data: {
     datasets: [{
-      label: "Sleep Log",
+      label: "Infrared",
       data: [],
       borderColor: "red",
       fill: false,
@@ -29,7 +29,7 @@ let chart = new Chart(document.getElementById("chart"), {
       y: {
         title: {
           display: true,
-          text: "Sleep Logs",
+          text: "Infrared Sensor",
         },
       }
     }
@@ -37,7 +37,7 @@ let chart = new Chart(document.getElementById("chart"), {
 });
 
 if (getLivePatient() === 'true') {
-  updateLiveChart(chart, "acc");
+  updateLiveChart(chart, "IR");
 } else {
-  showPastChart(chart, "acc");
+  showPastChart(chart, "IR");
 }

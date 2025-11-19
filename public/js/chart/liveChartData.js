@@ -13,6 +13,9 @@ async function asyncUpdateChart(chart, cmd) {
       case "IR":
         chart.data.datasets[0].data = patient.IR;
         break;
+      case "acc":
+        chart.data.datasets[0].data = patient.accel;
+        break;
     }
     chart.update();
   } catch (err) {
