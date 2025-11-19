@@ -1,6 +1,9 @@
 import { getCurrentPatient, getLivePatient } from '../currentPatient.js';
 
 export default function getDisplayText(string) {
+  if (getCurrentPatient() === null) {
+    return `No Patient Selected`;
+  }
   if (getLivePatient() === 'true') {
     string = 'Live ' + string;
   }

@@ -6,6 +6,8 @@
     <script src="js/passwordAuthentication.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/toggleViewMode.js" defer></script>
+    <script type="module" src="js/chart/spo2Chart.js"></script>
+    
     <meta charset="UTF-8">
     <title>ECE 198</title>
 </head>
@@ -22,14 +24,13 @@
                     <button onclick="window.location.href='spo2.html'">SPO2</button>
                     <button onclick="window.location.href='sleep-logs.html'">Sleep Logs</button>
                     <button onclick="window.location.href='LED.html'">Survey Results</button>
-                    <button id="toggleViewMode">🌙</button>
+                    <button id="toggleViewMode">🌙/button>
                     <button id="logoutBtn">Logout</button>
                 </nav>
             </div>
         </header>
-        <!-- Test Graph -->
+        <div id="display-message"></div>
         <div style="width: 800px;"><canvas id="chart"></canvas></div>
-        <script type="module" src="js/chart/liveChartData.js"></script>
     </div>
     <div id="password-protected-warning" hidden>
         <h1>Please log into the application</h1>
