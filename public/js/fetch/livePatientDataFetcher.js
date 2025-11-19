@@ -1,4 +1,4 @@
-import { getCurrentPatient, setCurrentPatient, getLivePatient} from './currentPatient.js';
+import { getCurrentPatient, setCurrentPatient, getLivePatient} from '../currentPatient.js';
 
 const currentPatient = getCurrentPatient();
 

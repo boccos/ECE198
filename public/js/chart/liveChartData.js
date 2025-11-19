@@ -1,4 +1,4 @@
-import getAsyncCurrentPatient from "../livePatientDataFetcher.js"
+import getAsyncCurrentPatient from "../fetch/livePatientDataFetcher.js"
 
 async function asyncUpdateChart(chart, cmd) {
   try {

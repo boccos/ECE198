@@ -1,8 +1,8 @@
 import Patient from "./patient.js";
-import fetchPastStreams from "./pastPatientDataFetcher.js";
-import { fetchStreams } from "./livePatientDataFetcher.js"
+import fetchPastStreams from "./fetch/pastPatientDataFetcher.js";
+import { fetchStreams } from "./fetch/livePatientDataFetcher.js"
 import { setCurrentPatient, getCurrentPatient, getLivePatient } from "./currentPatient.js";
-import { beginSession, endSession } from "./sessionHandler.js";
+import { beginSession, endSession } from "./fetch/sessionHandler.js";
 
 const patients = await fetchPastStreams();
 const select = document.getElementById("patient-select");
