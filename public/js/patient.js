@@ -17,7 +17,7 @@ export default class Patient {
     this.accelZ = accelZ;
     this.accel = [];
     for (let i = 0; i < accelX.length; i++) {
-      this.accel.push([accelX[i][0], Math.sqrt(accelX[i][1] * accelX[i][1] + accelY[i][1] * accelY[i][1] + accelZ[i][1] * accelZ[i][1])]);
+      this.accel.push([accelX[i][0], Math.sqrt(accelX[i][1] * accelX[i][1] + accelY[i][1] * accelY[i][1] + accelZ[i][1] * accelZ[i][1]).toFixed(2)]);
     }
     this.responseTime = responseTime;
     this.answeredCorrectly = answeredCorrectly;
@@ -51,19 +51,19 @@ export default class Patient {
     if (this.startTs === -1) {
       this.startTs = time;
     }
-    const deltaTime = time - this.startTs;
-    if (this.spO2.length > 1 && this.spO2[this.spO2.length - 1][0] === deltaTime) {
+    if (this.spO2.length > 1 && this.spO2[this.spO2.length - 1][0] === time) {
       return;
     }
-    this.spO2.push([deltaTime, data?.spo2]);
-    this.heartRate.push([deltaTime, data?.hr]);
-    this.IR.push([deltaTime, data?.IR]);
-    this.accelX.push([deltaTime, data?.accel_x]);
-    this.accelY.push([deltaTime, data?.accel_y]);
-    this.accelZ.push([deltaTime, data?.accel_z]);
-    this.accel.push([deltaTime, Math.sqrt(data?.accel_x * data?.accel_x + data?.accel_y * data?.accel_y + data?.accel_z * data?.accel_z)]);
-    this.responseTime.push([deltaTime, data?.response_time]);
-    this.answeredCorrectly.push([deltaTime, data?.answered_correctly]);
+    const date = new Date(time);
+    this.spO2.push([date, data?.spo2]);
+    this.heartRate.push([date, data?.hr]);
+    this.IR.push([date, data?.IR]);
+    this.accelX.push([date, data?.accel_x]);
+    this.accelY.push([date, data?.accel_y]);
+    this.accelZ.push([date, data?.accel_z]);
+    this.accel.push([date, Math.sqrt(data?.accel_x * data?.accel_x + data?.accel_y * data?.accel_y + data?.accel_z * data?.accel_z).toFixed(2)]);
+    this.responseTime.push([date, data?.response_time]);
+    this.answeredCorrectly.push([date, data?.answered_correctly]);
   }
 
   clearData() {

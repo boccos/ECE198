@@ -9,29 +9,64 @@ let chart = new Chart(document.getElementById("chart"), {
   type: "line",
   data: {
     datasets: [{
-      label: "spo2",
-      data: [],
+      label: "Blood Oxygen Level",
       borderColor: "red",
+      borderWidth: 2,
+      backgroundColor: "rgba(255, 0, 0, 0.2)",
       fill: false,
+      tension: 0.5,
+      pointRadius: 0,
+      pointHoverRadius: 5
     }]
   },
   options: {
     responsive: true,
-    animation: false,
+    animation: true,
+    plugins: {
+      tooltip: {
+        mode: "index",
+        intersect: false,
+        callbacks: {
+          label: function (context) {
+            return `SpO₂: ${context.parsed.y} %`;
+          }
+        }
+      },
+      legend: {
+        display: true,
+        position: "top"
+      }
+    },
     scales: {
       x: {
-        type: "linear",
+        type: "time",
+        time: {
+          unit: "minute",
+          tooltipFormat: "HH:mm:ss",
+          displayFormats: {
+            minute: "HH:mm"
+          }
+        },
         title: {
           display: true,
-          text: "Time",
+          text: "Time"
         },
+        ticks: {
+          autoSkip: true,
+          maxTicksLimit: 10
+        }
       },
       y: {
         title: {
           display: true,
-          text: "spo2",
+          text: "SpO₂ (%)"
         },
       }
+    },
+    interaction: {
+      mode: "nearest",
+      axis: "x",
+      intersect: false
     }
   }
 });

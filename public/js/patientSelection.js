@@ -65,12 +65,12 @@ endButton.addEventListener("click", async function (event) {
     confirm("No data has been collected yet. Please wait.");
     return;
   }
-  patient.setEndTs(patient.getStartTs() + patient.spO2[patient.spO2.length - 1][0]);
+  patient.setEndTs(patient.spO2[patient.spO2.length - 1][0]);
   setCurrentPatient(patient, false);
   beginButton.style.display = "block";
   endButton.style.display = "none";
   endSession(JSON.stringify(getCurrentPatient()));
-})
+});
 
 function addPatient(patient) {
   const option = document.createElement("option");
