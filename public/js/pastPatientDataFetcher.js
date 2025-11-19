@@ -1,6 +1,6 @@
 import Patient from "./patient.js"
 
-export default async function fetchStreams() {
+export default async function fetchStreamsPlus() {
   try {
     const res = await fetch(`/api/v1/patients/patientData/download`);
     if (res.status === 404) {

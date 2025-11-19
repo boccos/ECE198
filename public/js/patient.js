@@ -17,7 +17,6 @@ export default class Patient {
     this.accelZ = accelZ;
     this.accel = [];
     for (let i = 0; i < accelX.length; i++) {
-      console.log([accelX[i][0], Math.sqrt(accelX[i][1] * accelX[i][1] + accelY[i][1] * accelY[i][1] + accelZ[i][1] * accelZ[i][1])]);
       this.accel.push([accelX[i][0], Math.sqrt(accelX[i][1] * accelX[i][1] + accelY[i][1] * accelY[i][1] + accelZ[i][1] * accelZ[i][1])]);
     }
     this.responseTime = responseTime;
