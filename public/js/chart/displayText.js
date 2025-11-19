@@ -8,6 +8,12 @@ export default function getDisplayText(string) {
   if (getCurrentPatient().getEndTs() != -1) {
     endDate = new Date(getCurrentPatient().getEndTs()).toLocaleString();
   }
+  if (getCurrentPatient().getStartTs() === -1) {
+    return `
+  ${string} Data<br>
+  Patient: <strong>${getCurrentPatient().getFullName()}</strong><br>
+  Time: No Data`
+  }
   return `
   ${string} Data<br>
   Patient: <strong>${getCurrentPatient().getFullName()}</strong><br>

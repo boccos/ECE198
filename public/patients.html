@@ -33,22 +33,24 @@
         <select id="patient-select">
             <option value="" disabled selected hidden>-- Select a Patient --</option>
         </select>
-        <div id="patient-info"></div>
+        <h2>Add a Patient</h2>
+
+        <form id="patient-form">
+            <h3>Please input information below</h3>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" required><br><br>
+
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" required><br><br>
+
+            <button type="submit" id="begin-collection">Begin Data Collection!</button>
+            <button type="submit" id="end-collection">End Data Collection!</button>
+        </form>
+        <div id="password-protected-warning" hidden>
+            <h1>Please log into the application</h1>
+            <button onclick="window.location.href='index.html'">Login Page</button>
+        </div>
     </div>
-
-    <h2>Add a Patient</h2>
-
-    <form id="patient-form">
-        <h3>Please input information below</h3>
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="firstName" required><br><br>
-
-        <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="lastName" required><br><br>
-
-        <button type="submit" id = "begin-collection">Begin Data Collection!</button>
-        <button type="submit" id="end-collection">End Data Collection!</button>
-    </form>
     <div id="password-protected-warning" hidden>
         <h1>Please log into the application</h1>
         <button onclick="window.location.href='index.html'">Login Page</button>
