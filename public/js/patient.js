@@ -1,5 +1,5 @@
 export default class Patient {
-  constructor(id, firstName, lastName, startTs=-1, endTs=-1, spO2=[], heartRate=[], IR=[], accelX=[], accelY=[], accelZ=[], responseTime=[], answeredCorrectly=[]) {
+  constructor(id, firstName, lastName, startTs = -1, endTs = -1, spO2 = [], heartRate = [], IR = [], accelX = [], accelY = [], accelZ = [], responseTime = [], answeredCorrectly = []) {
     if (typeof id === 'string') {
       this.id = parseInt(id.slice(1), 10);
     } else {
@@ -26,7 +26,7 @@ export default class Patient {
   getStartTs() {
     return this.startTs;
   }
-  
+
   setStartTs(startTs) {
     this.startTs = startTs;
   }
@@ -43,7 +43,11 @@ export default class Patient {
     return `${this.firstName} ${this.lastName}`;
   }
 
-  updateData(deltaTime, data) {
+  updateData(time, data) {
+    if (this.startTs === -1) {
+      this.startTs = time;
+    }
+    const deltaTime = time - this.startTs;
     if (this.spO2.length > 1 && this.spO2[this.spO2.length - 1][0] === deltaTime) {
       return;
     }
@@ -55,5 +59,16 @@ export default class Patient {
     this.accelZ.push([deltaTime, data?.accel_z]);
     this.responseTime.push([deltaTime, data?.response_time]);
     this.answeredCorrectly.push([deltaTime, data?.answered_correctly]);
+  }
+
+  clearData() {
+    this.spO2 = [];
+    this.heartRate = [];
+    this.IR = [];
+    this.accelX = [];
+    this.accelY = [];
+    this.accelZ = [];
+    this.responseTime = [];
+    this.answeredCorrectly = [];
   }
 }

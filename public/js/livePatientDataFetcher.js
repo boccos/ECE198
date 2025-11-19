@@ -3,6 +3,7 @@ import { getCurrentPatient, setCurrentPatient} from './currentPatient.js';
 const INTERVAL_MS = 5000;
 
 const currentPatient = getCurrentPatient();
+currentPatient.clearData();
 
 export default async function getAsyncCurrentPatient() {
   if (currentPatient == null) {
@@ -12,8 +13,6 @@ export default async function getAsyncCurrentPatient() {
   setCurrentPatient(currentPatient, true);
   return currentPatient;
 }
-
-let firstServerTs = null;
 
 let isFetching = false;
 
@@ -26,10 +25,7 @@ async function fetchStreams() {
       return;
     }
     for (const row of rows) {
-      if (firstServerTs === null) {
-        firstServerTs = row?.serverTs;
-      }
-      currentPatient.updateData(row?.serverTs - firstServerTs, row?.data);
+      currentPatient.updateData(row?.serverTs, row?.data);
     }
   } catch (err) {
     console.error('History fetch failed:', err);
@@ -44,7 +40,7 @@ async function fetchLatest() {
     const res = await fetch(`/api/v1/patients/p001/latest`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const rows = await res.json();
-    currentPatient.updateData(rows?.serverTs - firstServerTs, rows?.data);
+    currentPatient.updateData(rows?.serverTs, rows?.data);
   } catch (err) {
     console.error('Live fetch failed:', err);
   } finally {
