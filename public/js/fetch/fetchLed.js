@@ -39,11 +39,3 @@ export async function leftOn() {
 export async function rightOn() {
   return sendLightCommand("R", "on");
 }
-
-export async function leftOff() {
-  return sendLightCommand("L", "off");
-}
-
-export async function rightOff() {
-  return sendLightCommand("R", "off");
-}
