@@ -29,7 +29,7 @@ void setup() {
   Serial.println("\nConnecting...");
 
   while (WiFi.status() != WL_CONNECTED) {
-    Serial.print("Attempting to connect");
+    Serial.println("Attempting to connect");
     delay(500);
   }
 
