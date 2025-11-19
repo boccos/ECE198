@@ -310,6 +310,30 @@ app.post("/api/v1/ingest", async (req, res) => {
   }
 });
 
+// ---------------- Past patients (streams+/patientData.json) ----------------
+
+// used by pastPatientDataFetcher.js → GET /api/v1/patients/patientData/download
+app.get("/api/v1/patients/patientData/download", async (req, res) => {
+  await ensureDirs();
+
+  if (!fssync.existsSync(PATIENT_DATA_FILE)) {
+    // no past sessions yet → send empty array
+    return res.json([]);
+  }
+
+  try {
+    const txt = await fs.readFile(PATIENT_DATA_FILE, "utf-8");
+    const arr = JSON.parse(txt);
+    if (!Array.isArray(arr)) {
+      return res.json([]);
+    }
+    res.json(arr);
+  } catch (err) {
+    console.error("Error reading patientData.json:", err);
+    res.json([]); // fail soft to keep frontend happy
+  }
+});
+
 // ---------------- Latest snapshot + raw download (per patientId) ----------------
 
 // latest snapshot (from latest/<id>.json)
@@ -335,30 +359,6 @@ app.get("/api/v1/patients/:id/download", async (req, res) => {
     `attachment; filename="${req.params.id}.json"`
   );
   fssync.createReadStream(p).pipe(res);
-});
-
-// ---------------- Past patients (streams+/patientData.json) ----------------
-
-// used by pastPatientDataFetcher.js → GET /api/v1/patients/patientData/download
-app.get("/api/v1/patients/patientData/download", async (req, res) => {
-  await ensureDirs();
-
-  if (!fssync.existsSync(PATIENT_DATA_FILE)) {
-    // no past sessions yet → send empty array
-    return res.json([]);
-  }
-
-  try {
-    const txt = await fs.readFile(PATIENT_DATA_FILE, "utf-8");
-    const arr = JSON.parse(txt);
-    if (!Array.isArray(arr)) {
-      return res.json([]);
-    }
-    res.json(arr);
-  } catch (err) {
-    console.error("Error reading patientData.json:", err);
-    res.json([]); // fail soft to keep frontend happy
-  }
 });
 
 // 404 last

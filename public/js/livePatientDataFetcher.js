@@ -1,4 +1,4 @@
-import { getCurrentPatient, setCurrentPatient} from './currentPatient.js';
+import { getCurrentPatient, setCurrentPatient, getLivePatient} from './currentPatient.js';
 
 const INTERVAL_MS = 5000;
 
@@ -48,7 +48,7 @@ async function fetchLatest() {
   }
 }
 
-if (currentPatient != null) {
+if (getLivePatient() === 'true' && currentPatient != null) {
   fetchStreams();
   fetchLatest();
   setInterval(fetchLatest, INTERVAL_MS);
