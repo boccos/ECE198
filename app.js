@@ -23,6 +23,13 @@ const TOKENS = TOKEN_STR.split(",")
   .map((s) => s.trim())
   .filter(Boolean);
 
+  // ESP32 base URL (e.g. http://172.20.10.4)
+const ESP32_BASE_URL = process.env.ESP32_BASE_URL || null;
+const ENABLE_ESP32_MOCK = process.env.ENABLE_ESP32_MOCK === "true";
+
+// In-memory debug info: lets you see if frontend called the light route
+let lastLightCommand = null;
+
 // paths
 const app = express();
 app.use(express.json({ limit: "200kb" }));
@@ -77,6 +84,49 @@ async function appendToArrayFile(filePath, record) {
   await fs.writeFile(filePath, JSON.stringify(arr, null, 2), "utf-8");
   return arr.length;
 }
+
+// ---------------------------------------------------------
+// ESP32 Light Control Helpers
+// ---------------------------------------------------------
+
+function buildEsp32Url(side, state) {
+  if (!ESP32_BASE_URL) {
+    throw new Error("ESP32_BASE_URL not configured");
+  }
+
+  // trim trailing slashes
+  const base = ESP32_BASE_URL.replace(/\/+$/, "");
+  // Example: http://172.20.10.4/L/on
+  return `${base}/${side}/${state}`;
+}
+
+async function callEsp32Light(side, state) {
+  const sideUpper = String(side).toUpperCase();
+  const stateLower = String(state).toLowerCase();
+
+  if (!["L", "R"].includes(sideUpper)) {
+    throw new Error("Invalid side (expected L or R)");
+  }
+  if (!["on", "off"].includes(stateLower)) {
+    throw new Error("Invalid state (expected on or off)");
+  }
+
+  const url = buildEsp32Url(sideUpper, stateLower);
+
+  if (ENABLE_ESP32_MOCK) {
+    console.log(`[ESP32 MOCK] would GET ${url}`);
+    return; // pretend success, no real network call
+  }
+
+  console.log("[ESP32] GET", url);
+
+  const res = await fetch(url, { method: "GET" });
+
+  if (!res.ok) {
+    throw new Error(`ESP32 HTTP ${res.status}`);
+  }
+}
+
 
 // ---------------------------------------------------------
 // Session State Helpers
@@ -359,6 +409,76 @@ app.get("/api/v1/patients/:id/download", async (req, res) => {
     `attachment; filename="${req.params.id}.json"`
   );
   fssync.createReadStream(p).pipe(res);
+});
+
+// ---------------- Light control (frontend → server → ESP32) ----------------
+
+app.post("/api/v1/lights/:side/:state", async (req, res) => {
+  // reuse your existing auth logic
+  if (!authorized(req, res)) return;
+
+  const side = String(req.params.side).toUpperCase();   // "L" or "R"
+  const state = String(req.params.state).toLowerCase(); // "on" or "off"
+
+  if (!["L", "R"].includes(side) || !["on", "off"].includes(state)) {
+    return res.status(400).json({ ok: false, error: "invalid_params" });
+  }
+
+  // optional: tie command to a patientId (like ingest does)
+  const patientId =
+    (req.query.patientId && String(req.query.patientId).trim()) ||
+    process.env.DEFAULT_PATIENT_ID ||
+    "p001";
+
+  console.log(
+    `[LIGHT] frontend request: patientId=${patientId}, side=${side}, state=${state}`
+  );
+
+  try {
+    await callEsp32Light(side, state);
+
+    // record last command so you can inspect it later
+    lastLightCommand = {
+      patientId,
+      side,
+      state,
+      success: true,
+      at: new Date().toISOString(),
+    };
+
+    // OPTIONAL: also log this into your streams JSON files
+    /*
+    await writeRecordToFiles({
+      patientId,
+      sensor: "ui-light-command",
+      data: { side, state },
+      ts: undefined,
+      serverTs: Date.now(),
+    });
+    */
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("Failed to call ESP32:", err);
+
+    lastLightCommand = {
+      patientId,
+      side,
+      state,
+      success: false,
+      error: err.message,
+      at: new Date().toISOString(),
+    };
+
+    res
+      .status(502)
+      .json({ ok: false, error: "esp32_unreachable", detail: err.message });
+  }
+});
+
+// small debug endpoint so you can verify frontend is hitting this
+app.get("/api/v1/lights/last", (req, res) => {
+  res.json({ ok: true, last: lastLightCommand });
 });
 
 // 404 last

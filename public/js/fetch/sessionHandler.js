@@ -1,4 +1,4 @@
-const API_KEY = "banana";
+import { API_KEY } from "../config.js";
 
 export async function beginSession() {
   try {
