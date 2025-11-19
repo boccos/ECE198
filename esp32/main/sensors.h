@@ -3,7 +3,14 @@
 
 #include <Wire.h> // I2C
 #include <DFRobot_MAX30102.h> // pulse oximeter
+#include <WebServer.h>
 
+
+
+extern bool isOn_L;
+extern bool isOn_R;
+extern unsigned long response_test_start_time;
+extern WebServer server;
 
 // Structure containing all data required
 struct sensor_data{
@@ -20,10 +27,10 @@ struct sensor_data{
     double accel_z{};
     
     // Switches
-    double response_time{}; // response time to button press
-    bool L_is_light_on{}; // if left light is on
-    bool R_is_light_on{}; // if right light is on
+    unsigned long response_time{}; // response time to button press
     bool answered_correctly{}; // if patient answered the question correctly
+    bool isOn_R{};
+    bool isOn_L{};
     
     
 };
@@ -40,12 +47,14 @@ double outputAccel(const int pin);
 
 
 // light functions
-void L_lightOn(sensor_data &data);
-void L_lightOff(sensor_data &data);
-void R_lightOn(sensor_data &data);
-void R_lightOff(sensor_data &data);
+void L_lightOn();
+void L_lightOff();
+void R_lightOn();
+void R_lightOff();
 
-
+// Buttons
+bool isButtonPressed_L();
+bool isButtonPressed_R();
 
 
 

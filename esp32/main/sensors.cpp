@@ -10,11 +10,15 @@ const double AlphaAcc = 0.5;
 const int SAMPLES = 10;
 double SmoothedVoltage = RestVoltage;
 
-// To be set
+// Light and button pins
 const int L_light_pin = D2;
 const int R_light_pin = D3;
 const int L_button = D4;
 const int R_button = D5;
+
+// Accessible via main.ino
+bool isOn_L = false;
+bool isOn_R = false;
 
 
 void setup_sensors(){
@@ -41,8 +45,11 @@ void setup_sensors(){
     digitalWrite(L_light_pin, LOW);
     digitalWrite(R_light_pin, LOW);
 
-    Serial.println("Sensors initialized");
+    // Begin server
+    server.begin();
 
+    Serial.println("Sensors initialized");
+    
 }
 
 void retrieve_data(sensor_data &data){
@@ -78,11 +85,9 @@ void retrieve_data(sensor_data &data){
     data.accel_y = outputAccel(accel_y_pin);
     data.accel_z = outputAccel(accel_z_pin);
 
-    // temporary variables for the switch system
-    data.response_time = -1;
-    data.answered_correctly = false;
-    data.L_is_light_on = false; // left light
-    data.R_is_light_on = false;
+    data.isOn_R = isOn_R;
+    data.isOn_L = isOn_L;
+
 
     return;
 
@@ -112,23 +117,47 @@ double outputAccel(const int pin) {
 }
 
 
-void L_lightOn(sensor_data &data){
+void L_lightOn(){
   digitalWrite(L_light_pin, HIGH);
-  data.L_is_light_on = true;
+  isOn_L = true;
+  response_test_start_time = millis();
+  server.send(200, "text/plain", "L Light ON");
 }
 void L_lightOff(){
   digitalWrite(L_light_pin, LOW);
-  data.L_is_light_on = false;
+  isOn_L = false;
+  server.send(200, "text/plain", "L Light OFF");
 }
 void R_lightOn(){
   digitalWrite(R_light_pin, HIGH);
-  data.R_is_light_on = true;
+  isOn_R = true;
+  response_test_start_time = millis();
+  server.send(200, "text/plain", "R Light ON");
 }
 void R_lightOff(){
   digitalWrite(R_light_pin, LOW);
-  data.L_is_light_on = false;
+  isOn_R = false;
+  server.send(200, "text/plain", "R Light OFF");
 }
 
 
+// Buttons
+bool isButtonPressed_L() {
 
+  if(digitalRead(L_button) == LOW){
+    return true;
+  }
+  
+  return false;
+}
+
+bool isButtonPressed_R() {
+
+  if(digitalRead(R_button) == LOW){
+    return true;
+  }
+
+  return false;
+
+}
 
