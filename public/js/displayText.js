@@ -1,4 +1,4 @@
-import { getCurrentPatient, getLivePatient } from '../currentPatient.js';
+import { getCurrentPatient, getLivePatient } from './currentPatient.js';
 
 export default function getDisplayText(string) {
   if (getCurrentPatient() === null) {
