@@ -23,16 +23,8 @@ export default class Patient {
     this.answeredCorrectly = answeredCorrectly;
   }
 
-  setId(id) {
-    this.id = id;
-  }
-
   getStartTs() {
     return this.startTs;
-  }
-
-  setStartTs(startTs) {
-    this.startTs = startTs;
   }
 
   getEndTs() {
@@ -45,6 +37,34 @@ export default class Patient {
 
   getFullName() {
     return `${this.firstName} ${this.lastName}`;
+  }
+
+  getCorrectPercentage() {
+    let cnt = 0;
+    for (let answer of this.answeredCorrectly) {
+      if (answer[1]) ++cnt;
+    }
+    return (cnt / this.answeredCorrectly.length).toFixed(2) * 100 + '%';
+  }
+
+  getResponseTime() {
+    let sum = 0;
+    for (let time of this.responseTime) {
+      sum += time[1];
+    }
+    return (sum / this.responseTime.length).toFixed(2);
+  }
+
+  getCorrectTime() {
+    let sum = 0;
+    let cnt = 0;
+    for (let i = 0; i < this.answeredCorrectly.length; i++) {
+      if (this.answeredCorrectly[i][1]) {
+        ++cnt;
+        sum += this.responseTime[i][1];
+      }
+    }
+   return (sum / cnt).toFixed(2);
   }
 
   updateData(time, data) {
@@ -62,8 +82,12 @@ export default class Patient {
     this.accelY.push([date, data?.accel_y]);
     this.accelZ.push([date, data?.accel_z]);
     this.accel.push([date, Math.sqrt(data?.accel_x * data?.accel_x + data?.accel_y * data?.accel_y + data?.accel_z * data?.accel_z).toFixed(2)]);
-    this.responseTime.push([date, data?.response_time]);
-    this.answeredCorrectly.push([date, data?.answered_correctly]);
+    if (data?.response_time !== undefined) {
+      this.responseTime.push([date, data?.response_time]);
+    }
+    if (data?.answered_correctly !== undefined) {
+      this.answeredCorrectly.push([date, data?.answered_correctly]);
+    }
   }
 
   clearData() {

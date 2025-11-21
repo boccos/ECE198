@@ -63,12 +63,8 @@ endButton.addEventListener("click", async function (event) {
   select.disabled = false;
 
   const patient = await fetchStreams(getCurrentPatient());
-  if (patient === undefined) {
-    confirm("Sensor not connected.");
-    return;
-  }
-  if (patient.spO2.length === 0) {
-    confirm("No data has been collected yet. Please wait.");
+  if (patient === undefined || patient.spO2.length === 0) {
+    confirm("No data has been collected. Please wait.");
     return;
   }
   patient.setEndTs(patient.spO2[patient.spO2.length - 1][0]);
