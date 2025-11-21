@@ -1,7 +1,7 @@
 import updateLiveChart from "./liveChartData.js";
 import showPastChart from "./pastChartData.js";
 import { getLivePatient } from '../currentPatient.js';
-import getDisplayText from './displayText.js';
+import getDisplayText from '../displayText.js';
 
 document.getElementById('display-message').innerHTML = getDisplayText('Sleep');
 

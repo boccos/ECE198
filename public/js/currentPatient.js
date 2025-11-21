@@ -1,4 +1,4 @@
-import Patient from "./patient.js"
+import Patient from "./patientClass.js"
 
 export function setCurrentPatient(patient, bool) {
     localStorage.setItem('currentPatient', JSON.stringify(patient));

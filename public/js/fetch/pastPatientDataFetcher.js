@@ -1,4 +1,4 @@
-import Patient from "../patient.js"
+import Patient from "../patientClass.js"
 
 export default async function fetchStreamsPlus() {
   try {

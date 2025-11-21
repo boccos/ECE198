@@ -1,7 +1,7 @@
-import { leftOn, rightOn } from './fetch/fetchLed.js'
-import getAsyncCurrentPatient from "./fetch/livePatientDataFetcher.js"
-import { getCurrentPatient, getLivePatient} from './currentPatient.js';
-import getDisplayText from './chart/displayText.js';
+import { leftOn, rightOn } from '../fetch/fetchLed.js'
+import getAsyncCurrentPatient from "../fetch/livePatientDataFetcher.js"
+import { getCurrentPatient, getLivePatient} from '../currentPatient.js';
+import getDisplayText from '../displayText.js';
 
 const leftButton = document.getElementById("left-LED-button");
 const rightButton = document.getElementById("right-LED-button");
