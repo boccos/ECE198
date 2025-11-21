@@ -1,4 +1,4 @@
-import { getCurrentPatient, setCurrentPatient, getLivePatient} from '../currentPatient.js';
+import { getCurrentPatient, setCurrentPatient, getLivePatient } from '../currentPatient.js';
 
 const currentPatient = getCurrentPatient();
 
@@ -21,6 +21,7 @@ export async function fetchStreams(patient) {
   patient.clearData();
   try {
     const res = await fetch(`/api/v1/patients/p001/download`);
+    if (res.status === 404) return;
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const rows = await res.json();
     if (!Array.isArray(rows) || rows.length === 0) {
@@ -38,7 +39,7 @@ export async function fetchStreams(patient) {
 async function fetchLatest() {
   if (isFetching) return;
   isFetching = true;
-  
+
   try {
     const res = await fetch(`/api/v1/patients/p001/latest`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);

@@ -499,7 +499,7 @@ function makeMockRecord(patientId = "p001") {
       accel_x: 200 + Math.random() * 150,
       accel_y: 0 + Math.random() * 150,
       accel_z: 200 + Math.random() * 150,
-      response_time: Math.random() * 5,
+      response_time: Math.random() * 5000,
       answered_correctly: Math.random() < 0.5,
     },
     ts: undefined,
