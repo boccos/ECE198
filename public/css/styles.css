@@ -239,3 +239,17 @@ button:active {
   color: var(--message-color);
   margin-top: 10px;
 }
+
+#main-content {
+  padding: 40px;
+}
+
+#display-message {
+  padding: 40px;
+}
+
+#chart {
+  padding: 20px;
+  max-width: 90vw;
+  max-height: 40vw;
+}

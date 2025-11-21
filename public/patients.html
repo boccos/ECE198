@@ -28,25 +28,27 @@
                 </nav>
             </div>
         </header>
-        <h2>Select a Patient</h2>
+        <div id="main-content">
+            <h2>Select a Patient</h2>
 
-        <label for="patient-select">Choose a patient:</label>
-        <select id="patient-select">
-            <option value="" disabled selected hidden>-- Select a Patient --</option>
-        </select>
-        <h2>Add a Patient</h2>
+            <label for="patient-select">Choose a patient:</label>
+            <select id="patient-select">
+                <option value="" disabled selected hidden>-- Select a Patient --</option>
+            </select>
+            <h2>Add a Patient</h2>
 
-        <form id="patient-form">
-            <h3>Please input information below</h3>
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" required><br><br>
+            <form id="patient-form">
+                <h3>Please input information below</h3>
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" required><br><br>
 
-            <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName" required><br><br>
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" required><br><br>
 
-            <button type="submit" id="begin-collection">Begin Data Collection!</button>
-            <button type="submit" id="end-collection">End Data Collection!</button>
-        </form>
+                <button type="submit" id="begin-collection">Begin Data Collection!</button>
+                <button type="submit" id="end-collection">End Data Collection!</button>
+            </form>
+        <div id="main-content"></div>
         <div id="password-protected-warning" hidden>
             <h1>Please log into the application</h1>
             <button onclick="window.location.href='index.html'">Login Page</button>
