@@ -1,13 +1,19 @@
 import { leftOn, rightOn } from '../fetch/fetchLed.js'
 import getAsyncCurrentPatient from "../fetch/livePatientDataFetcher.js"
-import { getCurrentPatient, getLivePatient} from '../currentPatient.js';
+import { getCurrentPatient, getLivePatient } from '../currentPatient.js';
 import getDisplayText from '../displayText.js';
 
 const leftButton = document.getElementById("left-LED-button");
 const rightButton = document.getElementById("right-LED-button");
 const resetButton = document.getElementById("reset-button");
 
-disableButtons(false);
+if (getCurrentPatient() === null) {
+  leftButton.disabled = true;
+  rightButton.disabled = true;
+  resetButton.disabled = true;
+} else {
+  disableButtons(localStorage.getItem('buttonControl') === 'true');
+}
 
 leftButton.addEventListener("click", async function () {
   leftOn();
@@ -21,12 +27,14 @@ rightButton.addEventListener("click", async function () {
 
 resetButton.addEventListener("click", async function () {
   disableButtons(false);
+  window.location.reload;
 });
 
 function disableButtons(flag) {
   leftButton.disabled = flag;
   rightButton.disabled = flag;
   resetButton.disabled = !flag;
+  localStorage.setItem('buttonControl', flag);
 }
 
 
@@ -45,6 +53,13 @@ async function showPastData() {
 }
 
 function setDisplay(patient) {
+  if (patient.responseTime.length === 0) {
+    document.getElementById("display-message").innerHTML += `
+    <div class="stats-container">
+       <p>No responses so far<p>
+    </div>`;
+    return;
+  }
   document.getElementById("display-message").innerHTML += `
     <div class="stats-container">
       <div class="stats-left">
@@ -63,6 +78,6 @@ function setDisplay(patient) {
 if (getLivePatient() === 'true') {
   asyncUpdateData();
   setInterval(() => asyncUpdateData(), 5000)
-} else {
+} else if (getCurrentPatient() !== null) {
   showPastData();
 }

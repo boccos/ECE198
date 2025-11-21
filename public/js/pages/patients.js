@@ -16,6 +16,11 @@ patients.forEach((patient) => {
   select.appendChild(option);
 });
 
+if (patients.length === 0) {
+  document.querySelector('#patient-select option[value="select"]').textContent =
+  "-- No Patients Available--";
+}
+
 
 if (getLivePatient() === "true") {
   addPatient(getCurrentPatient());
