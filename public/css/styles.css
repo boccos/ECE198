@@ -1,15 +1,11 @@
-/* Import the Google Fonts you want */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
-/* ---------- THEME VARIABLES ---------- */
-
-/* Light mode (default) */
 body {
   --bg-color: rgba(193, 225, 255, 0.3);
-   --footer-bg: rgba(212, 234, 255, 0.6);
+  --footer-bg: rgba(212, 234, 255, 0.6);
 
   --header-grad-top: rgba(146, 146, 146, 0.9);
   --header-grad-bottom: rgba(239, 239, 239, 0.5);
@@ -22,7 +18,7 @@ body {
   --btn-logout-bg: #e05353;
   --btn-logout-bg-hover: #cc4242;
 
-  --toggle-bg: #1e3a8a; /* moon button color */
+  --toggle-bg: #1e3a8a;
   --toggle-bg-hover: #2f53c0;
 
   --card-bg: rgba(255, 255, 255, 0.96);
@@ -30,14 +26,17 @@ body {
   --text-color: #1f2937;
   --input-border: #cbd5e1;
   --message-color: #b91c1c;
+
+  --grid-line-color: rgba(148, 163, 184, 0.4);
+
 }
 
-/* Dark mode overrides */
 body.dark-mode {
-  --bg-color: rgba(15, 23, 42, 1);                 /* dark navy background */
+  --bg-color: rgba(15, 23, 42, 1);
   --footer-bg: rgba(29, 60, 163, 0.7);
+
   --header-grad-top: rgba(15, 23, 42, 0.96);
-  --header-grad-bottom: rgba(30, 64, 175, 0.7);    /* deep blue gradient */
+  --header-grad-bottom: rgba(30, 64, 175, 0.7);
 
   --logo-color: #e5efff;
 
@@ -47,37 +46,51 @@ body.dark-mode {
   --btn-logout-bg: #f97373;
   --btn-logout-bg-hover: #f05252;
 
-  --toggle-bg: #facc15;   /* sun button yellow */
+  --toggle-bg: #facc15;
   --toggle-bg-hover: #fde047;
 
-  --card-bg: rgba(31, 41, 55, 0.9);   /* lighter gray for contrast */
-  --input-bg: rgba(55, 65, 81, 0.9);  /* medium gray for inputs */
+  --card-bg: rgba(31, 41, 55, 0.9);
+  --input-bg: rgba(55, 65, 81, 0.9);
   --text-color: #e5e7eb;
   --input-border: #64748b;
   --message-color: #fecaca;
+
+  --grid-line-color: rgba(255, 255, 255, 0.25);
+
 }
 
-/* ---------- BASE LAYOUT ---------- */
 
-html, body {
+* {
+  font-family: 'Inter', 'Exo 2', 'Lato', 'Roboto', sans-serif;
+}
+
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
   background-color: var(--bg-color);
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   color: var(--text-color);
   display: flex;
   flex-direction: column;
 }
 
-/* Hide header completely until JS unhides it */
+#content {
+  flex: 1 1;
+}
+
+#chart {
+  padding: 20px;
+  max-width: 90vw;
+  max-height: 60vh;
+  border-bottom: 5vw;
+}
+
 #password-protected[hidden] {
   display: none !important;
   visibility: hidden;
-  flex: 1;
+  flex: 1 1;
 }
-
-/* ---------- HEADER ---------- */
 
 header {
   position: relative;
@@ -100,7 +113,6 @@ header::before {
   z-index: -1;
 }
 
-/* Header layout */
 .header nav {
   display: flex;
   align-items: center;
@@ -110,7 +122,6 @@ header::before {
   padding: 0 28px;
 }
 
-/* Logo text */
 #header-logo {
   font-size: 32px;
   font-weight: 700;
@@ -119,8 +130,50 @@ header::before {
   margin-right: 16px;
 }
 
-/* ---------- TOGGLE BUTTON ---------- */
+button {
+  background-color: var(--btn-primary-bg);
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
 
+button:hover {
+  background-color: var(--btn-primary-bg-hover);
+  transform: translateY(-5px);
+}
+
+button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+button:disabled {
+  background-color: red;
+  border-radius: 12px;
+  color: white;
+  cursor: not-allowed;
+}
+
+#end-collection {
+  background-color: red;
+}
+
+#logoutBtn {
+  margin-left: auto;
+  background-color: var(--btn-logout-bg);
+}
+
+#logoutBtn:hover {
+  background-color: var(--btn-logout-bg-hover);
+}
+
+/* View mode toggle button (sun/moon) */
 #toggleViewMode {
   background-color: var(--toggle-bg);
   border: none;
@@ -148,52 +201,17 @@ header::before {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-/* ---------- GENERAL BUTTONS ---------- */
-
-button {
-  background-color: var(--btn-primary-bg);
-  border: none;
-  padding: 10px 22px;
-  border-radius: 8px;
-  color: white;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.15s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+/* LED buttons */
+.bigger-button {
+  font-size: 1.2rem !important;
+  padding: 14px 26px !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  margin: 40px;
 }
 
-button:hover {
-  background-color: var(--btn-primary-bg-hover);
-  transform: translateY(-5px);
-}
 
-button:active {
-  transform: translateY(1px);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-button:disabled {
-  background-color: red; /* Change Later */
-  border: none;
-  border-radius: 12px;
-  color: white;
-  cursor: not-allowed;
-  transition: background 0.2s ease, transform 0.15s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-/* Logout button */
-#logoutBtn {
-  margin-left: auto;
-  background-color: var(--btn-logout-bg);
-}
-
-#logoutBtn:hover {
-  background-color: var(--btn-logout-bg-hover);
-}
-
-/* ---------- LOGIN FORM ---------- */
+/* Login Form */
 
 #login-form {
   background: var(--card-bg);
@@ -230,7 +248,6 @@ button:disabled {
   box-shadow: 0 0 0 1px rgba(58, 130, 247, 0.4);
 }
 
-/* Login button inside form */
 #login-form button[type="submit"] {
   width: 100%;
   background-color: var(--btn-primary-bg);
@@ -253,7 +270,6 @@ button:disabled {
   transform: translateY(1px);
 }
 
-/* ---------- MESSAGE TEXT ---------- */
 #message {
   text-align: center;
   font-size: 14px;
@@ -261,45 +277,122 @@ button:disabled {
   margin-top: 10px;
 }
 
-/* ------- LED Buttons ----*/
+
+/* main contents card*/
+
+#main-content {
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+  border-radius: 18px;
+
+  padding: 32px 40px;
+  margin: 30px auto;
+  max-width: 900px;
+
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.18);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeIn 0.35s ease-out forwards;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+body.dark-mode #main-content {
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.55);
+}
+
+#main-content h2 {
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+#main-content form h3 {
+  margin-top: 0;
+}
+
+#main-content input,
+#main-content select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 18px;
+
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  color: var(--text-color);
+}
+
+
+/* LED Buttons */
+
 #led-buttons {
   display: flex;
   justify-content: center;
   padding-top: 10vh;
 }
 
-/* ------ General Styling ------- */
-
-* {
-  font-family: 'Inter', 'Exo 2', 'Lato',  'Roboto', sans-serif;
-}
-
-
-#main-content {
-  padding: 20px;
-}
-
 #display-message {
-  padding: 40px;
+  max-width: 720px;
+  margin: 40px auto;
+  padding: 24px 28px;
+  border-radius: 18px;
+
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.18);
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
-#content {
-  flex: 1;
+body.dark-mode #display-message {
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.55);
 }
 
-#chart {
-  padding: 20px;
-  max-width: 90vw;
-  max-height: 65vh;
-  border-bottom: 5vw;
-
+.stats-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(148, 163, 184, 0.5);
 }
+
+.stats-left,
+.stats-right {
+  flex: 1 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stats-left p,
+.stats-right p {
+  margin: 0;
+  font-size: 0.98rem;
+}
+
+@media (max-width: 640px) {
+  .stats-container {
+    flex-direction: column;
+  }
+}
+
+
+/* FOOTER */
 
 #footer {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -309,10 +402,12 @@ button:disabled {
   backdrop-filter: blur(4px);
 }
 
-.bigger-button {
-  font-size: 1.2rem !important;
-  padding: 14px 26px !important; 
-  border-radius: 12px !important;
-  font-weight: 600 !important;
-  margin: 40px;
+
+/* ANIMATIONS */
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -3,6 +3,12 @@ import showPastChart from "./pastChartData.js";
 import { getLivePatient } from '../currentPatient.js';
 import getDisplayText from '../displayText.js';
 
+function getGridColor() {
+  return getComputedStyle(document.body)
+    .getPropertyValue('--grid-line-color')
+    .trim();
+}
+
 document.getElementById('display-message').innerHTML = getDisplayText('Infrared');
 
 let chart = new Chart(document.getElementById("chart"), {
@@ -54,6 +60,9 @@ let chart = new Chart(document.getElementById("chart"), {
         ticks: {
           autoSkip: true,
           maxTicksLimit: 10
+        },
+        grid: {
+          color: getGridColor()
         }
       },
       y: {
@@ -61,6 +70,9 @@ let chart = new Chart(document.getElementById("chart"), {
           display: true,
           text: "Infrared"
         },
+        grid: {
+          color: getGridColor()
+        }
       }
     },
     interaction: {

@@ -3,6 +3,12 @@ import showPastChart from "./pastChartData.js";
 import { getLivePatient } from '../currentPatient.js';
 import getDisplayText from '../displayText.js';
 
+function getGridColor() {
+  return getComputedStyle(document.body)
+    .getPropertyValue('--grid-line-color')
+    .trim();
+}
+
 document.getElementById('display-message').innerHTML = getDisplayText('Heart-Rate');
 
 let chart = new Chart(document.getElementById("chart"), {
@@ -43,24 +49,15 @@ let chart = new Chart(document.getElementById("chart"), {
         time: {
           unit: "minute",
           tooltipFormat: "HH:mm:ss",
-          displayFormats: {
-            minute: "HH:mm"
-          }
+          displayFormats: { minute: "HH:mm" }
         },
-        title: {
-          display: true,
-          text: "Time"
-        },
-        ticks: {
-          autoSkip: true,
-          maxTicksLimit: 10
-        }
+        title: { display: true, text: "Time" },
+        ticks: { autoSkip: true, maxTicksLimit: 10 },
+        grid: { color: getGridColor() }
       },
       y: {
-        title: {
-          display: true,
-          text: "Heart Rate (bpm)"
-        },
+        title: { display: true, text: "Heart Rate (bpm)" },
+        grid: { color: getGridColor() }
       }
     },
     interaction: {

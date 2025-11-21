@@ -45,11 +45,19 @@ async function showPastData() {
 }
 
 function setDisplay(patient) {
-  document.getElementById('display-message').innerHTML += `
-  <br><br>Responses: <strong>${patient.responseTime.length}</strong><br>
-  Accuracy: <strong>${patient.getCorrectPercentage()}</strong><br>
-  Average Response Time: <strong>${patient.getResponseTime()}  ms</strong><br>
-  Average Correct Response Time: <strong>${patient.getCorrectTime()}  ms</strong>`;
+  document.getElementById("display-message").innerHTML += `
+    <div class="stats-container">
+      <div class="stats-left">
+        <p>Responses: <strong>${patient.responseTime.length}</strong></p>
+        <p>Accuracy: <strong>${patient.getCorrectPercentage()}</strong></p>
+      </div>
+
+      <div class="stats-right">
+        <p>Average Response Time: <strong>${patient.getResponseTime()} ms</strong></p>
+        <p>Average Correct Response Time: <strong>${patient.getCorrectTime()} ms</strong></p>
+      </div>
+    </div>
+  `;
 }
 
 if (getLivePatient() === 'true') {
