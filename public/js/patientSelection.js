@@ -19,10 +19,12 @@ patients.forEach((patient) => {
 
 if (getLivePatient() === "true") {
   addPatient(getCurrentPatient());
-  beginButton.style.display = "none";
+  beginButton.hidden = true;
+  endButton.hidden = false;
   select.disabled = true;
 } else {
-  endButton.style.display = "none";
+  beginButton.hidden = false;
+  endButton.hidden = true;
 }
 
 if (getCurrentPatient() != null) {
@@ -50,8 +52,8 @@ beginButton.addEventListener("click", async function (event) {
 
   setCurrentPatient(patient, true);
   select.disabled = true;
-  beginButton.style.display = "none";
-  endButton.style.display = "block";
+  beginButton.hidden = true;
+  endButton.hidden = false;
 
   beginSession();
 });
@@ -61,14 +63,18 @@ endButton.addEventListener("click", async function (event) {
   select.disabled = false;
 
   const patient = await fetchStreams(getCurrentPatient());
+  if (patient === undefined) {
+    confirm("Sensor not connected.");
+    return;
+  }
   if (patient.spO2.length === 0) {
     confirm("No data has been collected yet. Please wait.");
     return;
   }
   patient.setEndTs(patient.spO2[patient.spO2.length - 1][0]);
   setCurrentPatient(patient, false);
-  beginButton.style.display = "block";
-  endButton.style.display = "none";
+  beginButton.hidden = false;
+  endButton.hidden = true;
   endSession(JSON.stringify(getCurrentPatient()));
 });
 
