@@ -1,0 +1,177 @@
+#include "sensors.h"
+#include <Wire.h>
+
+// Initialize Pulse Oximeter sensor
+DFRobot_MAX30102 particleSensor;
+
+const double sensitivity = 0.3;
+const double AlphaAcc = 0.5;
+const int SAMPLES = 100;
+
+// // Smoothed voltage for each axis
+// double xSmoothedVoltage = 1.65;
+// double ySmoothedVoltage = 1.65;
+// double zSmoothedVoltage = 1.65;
+
+// // Zero G
+// double xZeroG = 1.65;
+// double yZeroG = 1.65;
+// double zZeroG = 1.65;
+const double RestVoltage = 1.641;
+const double RestVoltageX = 1.39;
+const double RestVoltageY = 1.39;
+const double RestVoltageZ = 1.36;
+
+double SmoothedVoltage = RestVoltage;
+
+// Light and button pins
+const int L_light_pin = D2;
+const int R_light_pin = D3;
+const int L_button = D4;
+const int R_button = D5;
+
+// Accessible via main.ino
+bool isOn_L = false;
+bool isOn_R = false;
+
+
+void setup_sensors(){
+
+    Serial.begin(115200); // for debugging
+    Wire.begin(); // enable I2C
+
+    while(!particleSensor.begin()){
+        Serial.println("MAX30102 not found!");
+        delay(1000);
+    }
+
+    particleSensor.sensorConfiguration(60, SAMPLEAVG_8, MODE_MULTILED, SAMPLERATE_400, PULSEWIDTH_411, ADCRANGE_16384);
+    
+    // Light initialization
+    pinMode(L_light_pin, OUTPUT);
+    pinMode(R_light_pin, OUTPUT);
+    
+    // Switch initialization
+    pinMode(L_button, INPUT);
+    pinMode(R_button, INPUT);
+
+    // Set outputs to LOW by default
+    digitalWrite(L_light_pin, LOW);
+    digitalWrite(R_light_pin, LOW);
+
+    // Begin server
+    server.begin();
+
+    Serial.println("Sensors initialized");
+    
+}
+
+void retrieve_data(sensor_data &data){
+    
+    // SPO2 and HR data, will be populated on heartrateAndOxygenSaturation call:
+    int32_t SPO2;
+    int8_t SPO2Valid;
+    int32_t heartRate;
+    int8_t heartRateValid;
+
+    // accelerometer pins
+    const int accel_x_pin = A0; // to be modified depending on hardware
+    const int accel_y_pin = A1;
+    const int accel_z_pin = A3;
+
+    particleSensor.heartrateAndOxygenSaturation(&SPO2, &SPO2Valid, &heartRate, &heartRateValid);
+
+    if(SPO2Valid){
+        data.spO2 = SPO2;
+    } else{
+        data.spO2 = -1; // not good reading, frontend must take this into account
+    }
+
+    if(heartRateValid){
+        data.heart_rate = heartRate;
+    } else{
+        data.heart_rate = -1; // not good reading, frontend must take this into account
+    }
+
+    data.IR = particleSensor.getIR();
+
+    data.accel_x = outputAccel(accel_x_pin, RestVoltageX);
+    data.accel_y = outputAccel(accel_y_pin, RestVoltageY);
+    data.accel_z = outputAccel(accel_z_pin, RestVoltageZ);
+
+    data.isOn_R = isOn_R;
+    data.isOn_L = isOn_L;
+
+
+    return;
+
+}
+
+double readAveragedVoltage(const int pin, int samples) {
+  long sum = 0;
+  for (int i = 0; i < samples; i++) {
+    sum += analogRead(pin);
+    delayMicroseconds(500);
+  }
+  return (sum / (double)samples) * (3.3 / 4095.0);
+}
+
+double smooth(double newVal, double prevVal, double alpha) {
+  return alpha * prevVal + (1 - alpha) * newVal;
+}
+
+double outputAccel(const int pin, const double restVoltage) {
+  double Voltage = readAveragedVoltage(pin, SAMPLES);
+  SmoothedVoltage = smooth(Voltage, SmoothedVoltage, AlphaAcc);
+
+  double g = (Voltage - restVoltage) / sensitivity;
+  double accel = g * 9.81;
+
+  return accel;
+}
+
+
+void L_lightOn(){
+  digitalWrite(L_light_pin, HIGH);
+  isOn_L = true;
+  response_test_start_time = millis();
+  server.send(200, "text/plain", "L Light ON");
+}
+void L_lightOff(){
+  digitalWrite(L_light_pin, LOW);
+  isOn_L = false;
+  server.send(200, "text/plain", "L Light OFF");
+}
+void R_lightOn(){
+  digitalWrite(R_light_pin, HIGH);
+  isOn_R = true;
+  response_test_start_time = millis();
+  server.send(200, "text/plain", "R Light ON");
+}
+void R_lightOff(){
+  digitalWrite(R_light_pin, LOW);
+  isOn_R = false;
+  server.send(200, "text/plain", "R Light OFF");
+}
+
+
+// Buttons
+bool isButtonPressed_L() {
+
+  if(digitalRead(L_button) == LOW){
+    return true;
+  }
+  
+  return false;
+}
+
+bool isButtonPressed_R() {
+
+  if(digitalRead(R_button) == LOW){
+    return true;
+  }
+
+  return false;
+
+}
+
