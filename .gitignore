@@ -1,2 +1,5 @@
 config.h
 ipdetection.ino
+/node_modules
+.env
+/public/js/config.js
