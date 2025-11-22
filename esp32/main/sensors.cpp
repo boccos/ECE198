@@ -4,20 +4,25 @@
 // Initialize Pulse Oximeter sensor
 DFRobot_MAX30102 particleSensor;
 
-
 const double sensitivity = 0.3;
 const double AlphaAcc = 0.5;
-const int SAMPLES = 10;
+const int SAMPLES = 100;
 
-// Smoothed voltage for each axis
-double xSmoothedVoltage = 1.65;
-double ySmoothedVoltage = 1.65;
-double zSmoothedVoltage = 1.65;
+// // Smoothed voltage for each axis
+// double xSmoothedVoltage = 1.65;
+// double ySmoothedVoltage = 1.65;
+// double zSmoothedVoltage = 1.65;
 
-// Zero G
-double xZeroG = 1.65;
-double yZeroG = 1.65;
-double zZeroG = 1.65;
+// // Zero G
+// double xZeroG = 1.65;
+// double yZeroG = 1.65;
+// double zZeroG = 1.65;
+const double RestVoltage = 1.641;
+const double RestVoltageX = 1.39;
+const double RestVoltageY = 1.39;
+const double RestVoltageZ = 1.36;
+
+double SmoothedVoltage = RestVoltage;
 
 // Light and button pins
 const int L_light_pin = D2;
@@ -90,9 +95,9 @@ void retrieve_data(sensor_data &data){
 
     data.IR = particleSensor.getIR();
 
-    data.accel_x = outputAccel(accel_x_pin, xSmoothedVoltage, xZeroG);
-    data.accel_y = outputAccel(accel_y_pin, ySmoothedVoltage, yZeroG);
-    data.accel_z = outputAccel(accel_z_pin, zSmoothedVoltage, zZeroG);
+    data.accel_x = outputAccel(accel_x_pin, RestVoltageX);
+    data.accel_y = outputAccel(accel_y_pin, RestVoltageY);
+    data.accel_z = outputAccel(accel_z_pin, RestVoltageZ);
 
     data.isOn_R = isOn_R;
     data.isOn_L = isOn_L;
@@ -115,11 +120,11 @@ double smooth(double newVal, double prevVal, double alpha) {
   return alpha * prevVal + (1 - alpha) * newVal;
 }
 
-double outputAccel(const int pin, double &SmoothedVoltage, double zeroG) {
+double outputAccel(const int pin, const double restVoltage) {
   double Voltage = readAveragedVoltage(pin, SAMPLES);
   SmoothedVoltage = smooth(Voltage, SmoothedVoltage, AlphaAcc);
 
-  double g = (Voltage - zeroG) / sensitivity;
+  double g = (Voltage - restVoltage) / sensitivity;
   double accel = g * 9.81;
 
   return accel;

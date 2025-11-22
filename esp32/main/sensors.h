@@ -43,7 +43,7 @@ void retrieve_data(sensor_data &data);
 // accelerometer helper functions to gather data from pins
 double readAveragedVoltage(const int pin, int samples);
 double smooth(double newVal, double prevVal, double alpha);
-double outputAccel(const int pin, double &SmoothedVoltage, double zeroG);
+double outputAccel(const int pin, const double restVoltage);
 
 
 // light functions
