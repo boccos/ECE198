@@ -18,16 +18,18 @@ if (getCurrentPatient() === null) {
 leftButton.addEventListener("click", async function () {
   leftOn();
   disableButtons(true);
+  window.location.reload();
 });
 
 rightButton.addEventListener("click", async function () {
   rightOn();
   disableButtons(true);
+  window.location.reload();
 });
 
 resetButton.addEventListener("click", async function () {
   disableButtons(false);
-  window.location.reload;
+  window.location.reload();
 });
 
 function disableButtons(flag) {
