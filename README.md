@@ -3,10 +3,11 @@
 
 ### About
 
-PRISM is a real-time continuous delirium monitoring wearable. Using an Arduino Nano ESP32, we send sensor data gathered from a pulse oximeter and an accelerometer via WiFi to an ExpressJS backend. We also designed a response time light test to assess patient responsiveness and attentiveness. All this data is presented on our simple-to-use frontend for healthcare professionals to interact with.
+PRISM is a real-time continuous delirium monitoring wearable. Using an Arduino Nano ESP32, sensor data is collected from a pulse oximeter and an accelerometer via WiFi to an ExpressJS backend. The wearable includes a response-time light-test to assess patient responsiveness and attentiveness. All this data is presented on our simple-to-use frontend for healthcare professionals to interact with.
 
 ### Features
 - Real-time data feed transmitted via WiFi
+- Storage of individual patient information
 - RESTfulAPI endpoints for communication between the frontend, backend and firmware
 - Simple, descriptive graphs detailing sensor data
 - Two-light responsiveness and attentiveness test
